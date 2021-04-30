@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="actor_icon_size">80dp</dimen>
+    <dimen name="actor_icon_land_size">160dp</dimen>
+    <dimen name="layout_gap">16dp</dimen>
+    <dimen name="view_big_gap">16dp</dimen>
+    <dimen name="view_medium_gap">8dp</dimen>
+    <dimen name="text_under_image_view_gap">6dp</dimen>
+    <dimen name="movie_card_width">170dp</dimen>
+    <dimen name="movie_card_height">296dp</dimen>
+    <dimen name="button_square_size_normal">24dp</dimen>
+    <dimen name="movie_card_image_width">166dp</dimen>
+    <dimen name="movie_card_image_height">248dp</dimen>
+    <dimen name="size_icon">16dp</dimen>
+    <dimen name="size_movie_poster">160dp</dimen>
+    <dimen name="size_movie_background_height">300dp</dimen>
+    <dimen name="error_message_size">200dp</dimen>
+    <dimen name="state_message_offset">128dp</dimen>
+    <dimen name="dimen_genres">8sp</dimen>
+    <dimen name="dimen_reviews">8sp</dimen>
+    <dimen name="dimen_duration">8sp</dimen>
+</resources>

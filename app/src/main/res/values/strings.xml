@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">TheMovieDBGeekKotlin</string>
+    <string name="movie_duration">137 min</string>
+    <string name="movie_genres_card">Action, Adventure, Drama</string>
+    <string name="image_like">image of like icon</string>
+    <string name="image_of_main_poster">image of main poster</string>
+    <string name="toolbar_title_search">Поиск</string>
+    <string name="popup_clear_all">Отменить фильтр</string>
+    <string name="popup_title_share">Поделиться</string>
+    <string name="popup_title_update_all">Обновить</string>
+    <string name="type_movie">Now Playing</string>
+    <string name="title">The Movie DB</string>
+    <string name="reload">Reload</string>
+    <string name="error">Error</string>
+    <string name="home">Home</string>
+    <string name="favourite">Favourite</string>
+    <string name="ratings">Ratings</string>
+    <string name="favourite">Favourite</string>
+    <string name="movie_list">Movie List</string>
+    <string name="movie_details">Movie Details</string>
 </resources>
