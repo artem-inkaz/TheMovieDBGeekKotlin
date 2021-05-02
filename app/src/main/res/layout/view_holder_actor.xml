@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/view_medium_gap"
+    app:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivActorsImage"
+            style="@style/ImageViewActorStyle"
+            android:contentDescription="@string/image_of_actor_or_actress"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvActorFullName"
+            style="@style/TextImageStyle"
+            android:layout_width="@dimen/actor_icon_size"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_under_image_view_gap"
+            android:gravity="start"
+            android:maxLines="2"
+            android:minLines="2"
+            tools:text="@tools:sample/full_names" />
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

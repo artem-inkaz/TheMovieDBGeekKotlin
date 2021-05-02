@@ -1,12 +1,18 @@
 package com.example.themoviedbgeekkotlin.model
 
+import com.example.androidacademy.data.Database_actors
+import com.example.androidacademy.data.Database_movies
+
 class MovieListRepositoryImpl: MovieListRepository {
 
     override fun getMovieFromServer(): Movie {
         return Movie()
     }
+    override fun getMovieFromLocalStorage() = Database_movies().getMovies()
 
-    override fun getMovieFromLocalStorage(): Movie {
-       return Movie()
+    override fun getActorFromServer(): Actor {
+        return Actor()
     }
+
+    override fun getActorFromLocalStorage() = Database_actors().getActors()
 }
