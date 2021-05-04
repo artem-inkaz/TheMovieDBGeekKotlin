@@ -9,11 +9,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/movieListRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:itemCount="4"
-        tools:listitem="@layout/view_holder_movie"
-        app:spanCount="2"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

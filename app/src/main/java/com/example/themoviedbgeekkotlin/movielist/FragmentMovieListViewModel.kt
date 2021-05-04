@@ -22,20 +22,11 @@ class FragmentMovieListViewModel(
         return liveDataToObserve
     }
 
-
-//    val random = Random()
-//    private fun rand(from: Int, to: Int): Int {
-//        return random.nextInt(to - from) + from
-//    }
-
     private fun getDataFromLocalStorage() {
         liveDataToObserve.value = AppState.Loading
-//        rand(10, 200)
         Thread {
             Thread.sleep(200)
             liveDataToObserve.postValue(AppState.Success(repositoryImpl.getMovieFromLocalStorage()))
-//            if (random.nextLong() == 180L) liveDataToObserve.postValue(AppState.Success(repositoryImpl.getMovieFromLocalStorage()))
-//            else liveDataToObserve.postValue(AppState.Error("Ошибка"))
         }.start()
     }
 }
