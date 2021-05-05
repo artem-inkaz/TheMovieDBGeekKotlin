@@ -19,7 +19,6 @@ class FragmentMovieList : Fragment() {
     private var _binding: FragmentMovieListFragmentBinding? = null
     private val binding get() = _binding!!
 
-//    private var adapter: MovieListAdapter? =null расскомментировать если будем работать через MovieListAdapter
     private var adapter: ContainerAdapter? =null
 
     private val viewModel: FragmentMovieListViewModel by lazy {
