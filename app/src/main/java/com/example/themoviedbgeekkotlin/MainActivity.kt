@@ -32,6 +32,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // инициализация глобальной константы APP_ACTIVITY
+        // теперь можем получать контекст из любого нашего приложения
+        APP_ACTIVITY = this
         // инициализация нашей связки
         _binding = MainActivityBinding.inflate(layoutInflater)
         // root овый макет

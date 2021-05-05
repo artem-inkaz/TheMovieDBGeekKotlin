@@ -7,7 +7,7 @@
     <dimen name="view_medium_gap">8dp</dimen>
     <dimen name="text_under_image_view_gap">6dp</dimen>
     <dimen name="movie_card_width">170dp</dimen>
-    <dimen name="movie_card_height">296dp</dimen>
+    <dimen name="movie_card_height">310dp</dimen>
     <dimen name="button_square_size_normal">24dp</dimen>
     <dimen name="movie_card_image_width">166dp</dimen>
     <dimen name="movie_card_image_height">248dp</dimen>
@@ -19,4 +19,6 @@
     <dimen name="dimen_genres">8sp</dimen>
     <dimen name="dimen_reviews">8sp</dimen>
     <dimen name="dimen_duration">8sp</dimen>
+    <dimen name="fab_margin">15dp</dimen>
+    <dimen name="fab_icon_size">56dp</dimen>
 </resources>
