@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="@dimen/movie_card_width"
+    android:layout_height="@dimen/movie_card_height"
+    android:layout_marginEnd="@dimen/view_big_gap"
+    android:layout_marginBottom="@dimen/view_big_gap"
+    android:padding="@dimen/view_medium_gap"
+    app:cardBackgroundColor="@color/view_card_border"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="0dp"
+    app:cardPreventCornerOverlap="false"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/toolbar"
+    app:rippleColor="@android:color/transparent"
+    app:strokeColor="@color/cardview_dark_background"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/view_card_background_end">
+
+        <ImageView
+            android:id="@+id/poster"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/movie_card_image_height"
+            android:contentDescription="@string/image_of_main_poster"
+            android:scaleType="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/gradient_view_card"
+            app:layout_constraintBottom_toBottomOf="@+id/poster"
+            app:layout_constraintEnd_toEndOf="@+id/poster"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/poster"
+            app:layout_constraintTop_toTopOf="@+id/poster"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/age_rating"
+            android:layout_width="@dimen/button_square_size_normal"
+            android:layout_height="@dimen/button_square_size_normal"
+            android:layout_marginStart="@dimen/view_medium_gap"
+            android:layout_marginTop="@dimen/view_medium_gap"
+            android:background="@drawable/button_corner_rounded"
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0+" />
+
+        <ImageView
+            android:id="@+id/like"
+            android:layout_width="@dimen/size_icon"
+            android:layout_height="@dimen/size_icon"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/image_like"
+            app:layout_constraintBottom_toBottomOf="@+id/age_rating"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/age_rating"
+            app:srcCompat="@drawable/ic_like_empty" />
+
+        <TextView
+            android:id="@+id/genres"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/view_medium_gap"
+            android:layout_marginEnd="@dimen/view_medium_gap"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/accent"
+            android:textSize="@dimen/dimen_genres"
+            app:layout_constraintBottom_toTopOf="@+id/ratingBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/movie_genres_card" />
+
+        <!--don't know how to make rating bar even more smaller-->
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:scaleX=".8"
+            android:scaleY=".8"
+            android:theme="@style/RatingBarStyle"
+            app:layout_constraintBottom_toBottomOf="@+id/poster"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:rating="4" />
+
+        <TextView
+            android:id="@+id/reviews"
+            style="@style/ReviewTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dimen_reviews"
+            app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+            app:layout_constraintStart_toEndOf="@+id/ratingBar"
+            app:layout_constraintTop_toTopOf="@+id/ratingBar"
+            tools:ignore="RtlSymmetry"
+            tools:text="125 Reviews" />
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextHeaderStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/view_medium_gap"
+            android:layout_marginTop="@dimen/view_medium_gap"
+            android:layout_marginEnd="@dimen/view_medium_gap"
+            android:maxLines="1"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/duration"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/poster"
+            tools:text="@tools:sample/full_names" />
+
+        <TextView
+            android:id="@+id/duration"
+            style="@style/ReviewTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="bottom"
+            android:textSize="@dimen/dimen_duration"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:text="@string/movie_duration" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/loadingBackground"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+</com.google.android.material.card.MaterialCardView>
