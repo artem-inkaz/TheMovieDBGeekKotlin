@@ -26,7 +26,9 @@ class FragmentMovieList : Fragment() {
 //    private var adapter: MovieListAdapter? =null расскомментировать если будем работать через MovieListAdapter
     private var adapter: ContainerAdapter? =null
 
-    private lateinit var viewModel: FragmentMovieListViewModel
+    private val viewModel: FragmentMovieListViewModel by lazy {
+        ViewModelProvider(this).get(FragmentMovieListViewModel::class.java)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -42,11 +44,6 @@ class FragmentMovieList : Fragment() {
         binding.movieListRecyclerView.adapter = adapter
         binding.movieListRecyclerView.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FragmentMovieListViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getMovieFromLocalStorage()
     }
@@ -56,7 +53,7 @@ class FragmentMovieList : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
-//*************** код если указат ьв качестве адаптера ** MovieListAdapter ***
+//*************** код если указат ь в качестве адаптера ** MovieListAdapter ***
 //                adapter = MovieListAdapter(object  : OnItemViewClickListener{
 //                    override fun onItemViewClick(movie: Movie) {
 //                        val bundle = Bundle().apply {
@@ -86,11 +83,6 @@ class FragmentMovieList : Fragment() {
             }
         }
     }
-
-    private fun setData(movieData: Movie) {
-//        binding.title.text = movieData.title
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

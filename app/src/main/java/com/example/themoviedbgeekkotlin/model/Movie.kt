@@ -12,11 +12,11 @@ data class Movie(
         val poster: Int = 0,
         val backdrop: Int = 0,
         val ratings: Double = 5.0,
-        val adult: String = "",
+        val adult: String = "13+",
         val runtime: Int? = 123,
         val reviews: Int = 500,
         val like: Boolean = false,
-        val story: String = "",
+        val story: String = "Захватывающий боевик про уличные драки",
         val dateRelease: String = "2020-05-21",
         val actors: Actor = getDefaultActor(),
 ) : Parcelable

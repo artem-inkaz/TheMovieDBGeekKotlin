@@ -13,7 +13,9 @@ class FragmentFavourite : Fragment() {
     private var _binding: FragmentFavouriteFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: FragmentFavouriteViewModel
+    private val viewModel: FragmentFavouriteViewModel by lazy {
+        ViewModelProvider(this).get(FragmentFavouriteViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,12 +24,6 @@ class FragmentFavourite : Fragment() {
         _binding = FragmentFavouriteFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FragmentFavouriteViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     override fun onDestroyView() {
