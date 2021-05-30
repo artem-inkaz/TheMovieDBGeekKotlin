@@ -39,7 +39,7 @@ class ContainerAdapter(private val context: Context, private val sections : List
 //                ItemRecyclerviewAdapter(
 //                    section.items
 //                ).apply { setMovie(Database_movies().getMovies()) }
-
+            // передача данных во фрагмент детали о фильме
             val adapter = ItemRecyclerviewAdapter(section.items, object  : OnItemViewClickListener {
                     override fun onItemViewClick(movie: Movie) {
                         val bundle = Bundle().apply {
