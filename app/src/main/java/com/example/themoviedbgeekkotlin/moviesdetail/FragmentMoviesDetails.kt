@@ -1,20 +1,27 @@
 package com.example.themoviedbgeekkotlin.moviesdetail
 
 import android.annotation.SuppressLint
+import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.themoviedbgeekkotlin.APP_ACTIVITY
+import com.example.themoviedbgeekkotlin.BuildConfig
 import com.example.themoviedbgeekkotlin.R
+import com.example.themoviedbgeekkotlin.api.MovieDto
 import com.example.themoviedbgeekkotlin.databinding.FragmentMoviesDetailsFragmentBinding
 import com.example.themoviedbgeekkotlin.model.Movie
 import com.example.themoviedbgeekkotlin.movielist.AppState
 import com.example.themoviedbgeekkotlin.movielist.FragmentMovieListViewModel
+import com.example.themoviedbgeekkotlin.moviesdetail.internet.MoviesLoader
 import com.google.android.material.snackbar.Snackbar
 
 class FragmentMoviesDetails : Fragment() {
@@ -27,6 +34,19 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     private var adapter: ActorAdapter? = null
+    // Для загрузки из интернета
+    private lateinit var movieBundle: Movie
+    private val onLoadListener: MoviesLoader.MoviesLoaderListener =
+            object : MoviesLoader.MoviesLoaderListener {
+
+                override fun onLoaded(movieDto: MovieDto) {
+                    displayMovie(movieDto)
+                }
+
+                override fun onFailed(throwable: Throwable) {
+                    //Обработка ошибки
+                }
+            }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -42,24 +62,18 @@ class FragmentMoviesDetails : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val movie = arguments?.getParcelable<Movie>(BUNDLE_EXTRA)
+        movieBundle = arguments?.getParcelable<Movie>(BUNDLE_EXTRA)!!
         binding.recyclerView.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerView.adapter = adapter
-        movie?.let {
-            with(binding) {
-                tvTitle.text = it.title
-                imgTitlePoster.setImageResource(movie.backdrop)
-                ratingBar.rating = it.ratings.toFloat()
-                tvAgeRating.text = it.adult
-                tvGenres.text = it.genres.name
-                tvReviews.text = it.reviews.toString() + " REVIEWS"
-                tvStorylineText.text = it.story
-            }
-        }
+
+        val loader = MoviesLoader(onLoadListener, movieBundle.id)
+        loader.loadMovie()
+
 
         binding.toolbar.setOnClickListener {
             APP_ACTIVITY.navController.navigate(R.id.action_moviesdetailFragment_to_movielistFragment)
@@ -69,6 +83,21 @@ class FragmentMoviesDetails : Fragment() {
         viewModel.getMovieFromLocalStorage()
 
     }
+
+    private fun displayMovie(movieDto: MovieDto) {
+
+        with(binding) {
+            tvTitle.text = movieDto.title
+            Glide.with(root.context)
+                .load(BuildConfig.BASE_IMAGE_URL + movieDto.backdrop)
+                .apply(imageOption)
+                .into(imgTitlePoster)
+            ratingBar.rating = movieDto.ratings /2
+            tvReviews.text = movieDto.reviews.toString() + " REVIEWS"
+            tvStorylineText.text = movieDto.overview
+        }
+    }
+
 
     // Статус загрузки
     private fun renderData(appState: AppState) {
@@ -105,5 +134,10 @@ class FragmentMoviesDetails : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+
+        private val imageOption = RequestOptions()
+                .placeholder(R.drawable.ic_combined_shape)
+                .fallback(R.drawable.ic_combined_shape)
+                .centerCrop()
     }
 }

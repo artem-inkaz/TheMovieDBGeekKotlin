@@ -36,7 +36,7 @@ android {
             // If you decide to play with this app more than a few times,
             // please, create your own api key, so this one does not get banned:
             // https://www.themoviedb.org/documentation/api
-            buildConfigField "String", "API_KEY", "\"3847095cad8449ec1b9ca6240fa9102c\""
+//            buildConfigField "String", "API_KEY", "\"3847095cad8449ec1b9ca6240fa9102c\""
         }
     }
     compileOptions {

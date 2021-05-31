@@ -8,11 +8,11 @@ import com.example.themoviedbgeekkotlin.model.Movie
 class Database_movies {
     fun getMovies() = listOf(
             Movie(
-                    1,
+                    632357,
                     "Avengers: End Game",
                     Genre(1, "Action, Adventure, Drama"),
                     R.drawable.movie_avengers_end_game,
-                    R.drawable.details_movie_avenger_end_game,
+                    "",
                     4.0,
                     "13+",
                     125,
@@ -25,11 +25,11 @@ class Database_movies {
                     Actor("Robert", "Downey Jr.", R.drawable.movie_downey),
 
                     ),
-            Movie(2,
+            Movie(823855,
                     "Tenet",
                     Genre(2, "Action, Sci-Fi, Thriller"),
                     R.drawable.movie_tenet,
-                    R.drawable.details_movie_avenger_end_game,
+                    "",
                     5.0,
                     "13+",
                     98,
@@ -42,11 +42,11 @@ class Database_movies {
                     Actor("Chris", "Evans", R.drawable.movie_evans)
 
             ),
-            Movie(3,
+            Movie(460465,
                     "Black Widow",
                     Genre(3, "Action, Adventure, Fantasy"),
                     R.drawable.movie_black_widow,
-                    R.drawable.details_movie_avenger_end_game,
+                    "",
                     4.5,
                     "17+",
                     38,
@@ -60,11 +60,11 @@ class Database_movies {
 
             ),
             Movie(
-                    4,
+                    337404,
                     "Wonder Woman 1984",
                     Genre(4, "Action, Adventure, Sci-Fi"),
                     R.drawable.movie_wonder_woman_1984,
-                    R.drawable.details_movie_avenger_end_game,
+                    "",
                     3.2,
                     "13+",
                     150,
@@ -82,11 +82,11 @@ class Database_movies {
 
 fun getMoviesNowPlaying(): List<Movie> {
     return listOf(
-            Movie(2,
+            Movie(578701,
                     "Tenet",
                     Genre(2, "Action, Sci-Fi, Thriller"),
                     R.drawable.movie_tenet,
-                    R.drawable.details_movie_avenger_end_game,
+                    "",
                     5.0,
                     "13+",
                     98,
@@ -100,11 +100,11 @@ fun getMoviesNowPlaying(): List<Movie> {
 
             ),
             Movie(
-                    4,
+                    399566,
                     "Wonder Woman 1984",
                     Genre(4, "Action, Adventure, Sci-Fi"),
                     R.drawable.movie_wonder_woman_1984,
-                    R.drawable.details_movie_avenger_end_game,
+                    "",
                     3.2,
                     "13+",
                     150,

@@ -5,24 +5,32 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.viewbinding.BuildConfig
+import com.example.themoviedbgeekkotlin.BuildConfig
+//import androidx.viewbinding.BuildConfig
+import com.example.themoviedbgeekkotlin.BuildConfig.THEMOVIEDB_API_KEY
 import com.example.themoviedbgeekkotlin.api.MovieDto
+import com.example.themoviedbgeekkotlin.api.MoviesDto
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.MalformedURLException
 import java.net.URL
+import java.util.concurrent.Executor
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
 
 @RequiresApi(Build.VERSION_CODES.N)
-class MoviesLoader(private val listener: MoviesLoaderListener, private val lat: Double, private val lon: Double) {
+class MoviesLoader(private val listener: MoviesLoaderListener, private val movieId: Int) {
+
+    //https://api.themoviedb.org/3/movie/632357?api_key=3847095cad8449ec1b9ca6240fa9102c
+    //https://api.themoviedb.org/3/movie/popular?api_key=3847095cad8449ec1b9ca6240fa9102c&page=1
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun loadMovie() {
         try {
             val uri =
-                URL("https://api.weather.yandex.ru/v2/informers?lat=${lat}&lon=${lon}")
+                URL("https://api.themoviedb.org/3/movie/${movieId}?api_key=${BuildConfig.THEMOVIEDB_API_KEY}")
+//                URL("https://api.themoviedb.org/3/movie/popular?api_key=${BuildConfig.THEMOVIEDB_API_KEY}")
             val handler = Handler(Looper.getMainLooper())
             Thread(Runnable {
                 lateinit var urlConnection: HttpsURLConnection
@@ -33,7 +41,7 @@ class MoviesLoader(private val listener: MoviesLoaderListener, private val lat: 
 //                        "X-Yandex-API-Key",
 //                        BuildConfig.THEMOVIEDB_API_KEY
 //                    )
-                    urlConnection.readTimeout = 10000
+                    urlConnection.readTimeout = 0
                     val bufferedReader =
                         BufferedReader(InputStreamReader(urlConnection.inputStream))
 
@@ -55,7 +63,6 @@ class MoviesLoader(private val listener: MoviesLoaderListener, private val lat: 
             listener.onFailed(e)
         }
     }
-
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getLines(reader: BufferedReader): String {

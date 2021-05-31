@@ -6,11 +6,11 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Movie(
-        val id: Int = 1,
+        val id: Int = 503736,
         val title: String = "Мортал Комбат",
         val genres: Genre = getDefaultGenre(),
         val poster: Int = 0,
-        val backdrop: Int = 0,
+        val backdrop: String="",
         val ratings: Double = 5.0,
         val adult: String = "13+",
         val runtime: Int? = 123,
