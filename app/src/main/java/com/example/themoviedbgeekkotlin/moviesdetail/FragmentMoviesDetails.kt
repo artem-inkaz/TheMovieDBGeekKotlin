@@ -24,7 +24,7 @@ import com.example.themoviedbgeekkotlin.movielist.FragmentMovieListViewModel
 import com.example.themoviedbgeekkotlin.moviesdetail.internet.MoviesLoader
 import com.google.android.material.snackbar.Snackbar
 
-class FragmentMoviesDetails : Fragment() {
+class FragmentMoviesDetails1 : Fragment() {
 
     private var _binding: FragmentMoviesDetailsFragmentBinding? = null
     private val binding get() = _binding!!
@@ -129,8 +129,8 @@ class FragmentMoviesDetails : Fragment() {
     companion object {
         const val BUNDLE_EXTRA = "movie"
 
-        fun newInstance(bundle: Bundle): FragmentMoviesDetails {
-            val fragment = FragmentMoviesDetails()
+        fun newInstance(bundle: Bundle): FragmentMoviesDetails1 {
+            val fragment = FragmentMoviesDetails1()
             fragment.arguments = bundle
             return fragment
         }

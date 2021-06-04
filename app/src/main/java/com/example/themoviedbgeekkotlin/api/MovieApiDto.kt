@@ -26,6 +26,19 @@ data class MovieDto(
     val genreIds: List<Int>
 )
 
+data class MovieDtoEx(
+        val id: Int,
+        val title: String?,
+        val overview: String?,
+        @SerializedName("backdrop_path")
+        val backdrop: String?,
+        @SerializedName("vote_average")
+        val ratings: Float,
+        val runtime: Int? = null,
+        @SerializedName("vote_count")
+        val reviews: Int
+)
+
 // genres
 data class GenresDto(
     val genres: List<GenreDto>

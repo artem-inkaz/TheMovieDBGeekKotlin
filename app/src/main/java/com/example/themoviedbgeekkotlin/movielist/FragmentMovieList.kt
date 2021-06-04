@@ -41,6 +41,8 @@ class FragmentMovieList : Fragment() {
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getMovieFromLocalStorage()
+
+
     }
 
     // Статус загрузки
