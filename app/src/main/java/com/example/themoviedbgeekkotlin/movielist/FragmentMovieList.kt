@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.FragmentMovieListFragmentBinding
 import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerview.ContainerAdapter
 import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerview.DataStore
+import com.example.themoviedbgeekkotlin.notification.MoviesNotificationHelper
 import com.google.android.material.snackbar.Snackbar
 
 class FragmentMovieList : Fragment() {
@@ -42,7 +44,8 @@ class FragmentMovieList : Fragment() {
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getMovieFromLocalStorage()
 
-
+        // отображаем нотификацию
+        showNotification()
     }
 
     // Статус загрузки
@@ -69,6 +72,15 @@ class FragmentMovieList : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showNotification() {
+        // запустим уведомление
+        //Теперь, по нажатию на кнопку, помимо перехода на следующий фрагмент у нас появится уведомление
+        MoviesNotificationHelper.createMoviesNotification(
+                requireContext(), "Супер Уведомление", "Это уведомление для отладки", "", true
+        )
+
     }
 
     companion object {

@@ -16,29 +16,11 @@ class PeriodicMovieWorkerManager(private val context: Context, params: WorkerPar
     Worker(context,params) {
 
     override fun doWork(): Result {
-//        val repository: MovieListRepository = MovieListRepositoryImpl()
-//        repository.getMovieFromLocalStorage()
         return Result.success()
     }
 
 //    @SuppressLint("CheckResult")
 //    override fun createWork(): Single<Result> {
-//        // Репозиторий для получения фильмов
-//        val repository: MovieListRepository = MovieListRepositoryImpl()
-////        val bdMovies: Movie = Database_movies()
-//       return repository.getMovieFromLocalStorage()
-//            /* Для работы с БД необходимо изменить поток на io() */
-//           .observeOn(Schedulers.io())
-//            .flatMap {
-//                repository.getMovieFromLocalStorage()
-//            }
-//            // Возвращаем статус success()
-//            .map { Result.success() }
-//            // Если произойдет ошибка возвращаем статус failure()
-////            .onErrorReturn {
-////                Log.d("LocationWorker", "Ошибка получения данных")
-////                Result.failure()
-////            }
 //    }
 
 

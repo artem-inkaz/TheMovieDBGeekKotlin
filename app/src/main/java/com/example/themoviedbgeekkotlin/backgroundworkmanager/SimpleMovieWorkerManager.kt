@@ -14,33 +14,12 @@ import java.util.concurrent.TimeUnit
 class SimpleMovieWorkerManager(private val context: Context, params: WorkerParameters) :
         Worker(context,params) {
 
-    // Репозиторий для работы с таблицей БД
-//    private val repository by lazy { GeoInfoDatabase.getDatabase(context).wordDao() }
-
     override fun doWork(): Result {
-//        val repository: MovieListRepository = MovieListRepositoryImpl()
-//        repository.getMovieFromServer()
         Log.d("SimpleWorker", "Данные есть!")
-
         return Result.success()
     }
 
 //    override fun createWork(): Single<Result> {
-//        val repository: MovieListRepository = MovieListRepositoryImpl()
-//        return repository.getMovieFromLocalStorage()
-//            // Для работы с БД необходимо изменить поток на io()
-//            .observeOn(Schedulers.io())
-//            // После получения данных сохраняем в БД
-//            .flatMap {
-//                repository.getMovieFromLocalStorage()
-//            }
-//            // Возвращаем статус success()
-//            .map { Result.success() }
-//            // Если произойдет ошибка возвращаем статус failure()
-//            .onErrorReturn {
-//                Log.d("LocationWorker", "Ошибка получения данных")
-//                Result.failure()
-//            }
 //    }
 
 
