@@ -22,7 +22,9 @@ class FragmentMoviesDetails : Fragment() {
     private var _binding: FragmentMoviesDetailsFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: FragmentMovieListViewModel
+    private val viewModel: FragmentMovieListViewModel by lazy {
+        ViewModelProvider(this).get(FragmentMovieListViewModel::class.java)
+    }
 
     private var adapter: ActorAdapter? = null
 
@@ -48,26 +50,24 @@ class FragmentMoviesDetails : Fragment() {
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerView.adapter = adapter
         movie?.let {
-            binding.tvTitle.text = movie.title
-            binding.imgTitlePoster.setImageResource(movie.backdrop)
-            binding.ratingBar.rating = movie.ratings.toFloat()
-            binding.tvAgeRating.text = movie.adult
-            binding.tvGenres.text = movie.genres.name
-            binding.tvReviews.text = movie.reviews.toString() + " REVIEWS"
-            binding.tvStorylineText.text = movie.story
+            with(binding) {
+                tvTitle.text = it.title
+                imgTitlePoster.setImageResource(movie.backdrop)
+                ratingBar.rating = it.ratings.toFloat()
+                tvAgeRating.text = it.adult
+                tvGenres.text = it.genres.name
+                tvReviews.text = it.reviews.toString() + " REVIEWS"
+                tvStorylineText.text = it.story
+            }
         }
 
         binding.toolbar.setOnClickListener {
             APP_ACTIVITY.navController.navigate(R.id.action_moviesdetailFragment_to_movielistFragment)
         }
 
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FragmentMovieListViewModel::class.java)
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
         viewModel.getMovieFromLocalStorage()
+
     }
 
     // Статус загрузки
@@ -75,7 +75,6 @@ class FragmentMoviesDetails : Fragment() {
 
         when (appState) {
             is AppState.Success -> {
-//                val actors = movie.actors
                 adapter = ActorAdapter()
                         .apply { setActor(appState.movie) }
                 binding.recyclerView.adapter = adapter
