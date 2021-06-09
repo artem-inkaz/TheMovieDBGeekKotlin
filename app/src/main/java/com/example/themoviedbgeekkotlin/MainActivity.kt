@@ -25,11 +25,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
 
     lateinit var mToolbar: Toolbar
+
     // навигация
     lateinit var navController: NavController
     lateinit var bottom_navigation: BottomNavigationView
+
     // создание связки, при закрытии MainActivity должны обнулят нашу ссылку _binding
     private var _binding: MainActivityBinding? = null
+
     // сссылка ссылается на наш _binding данная строчка val mBinding get() = _binding!! позволит избежать проверки на null
     // _binding!! - будет 100% не null
     val mBinding get() = _binding!!
@@ -86,20 +89,20 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         // получение item id
-        when(item.itemId){
+        when (item.itemId) {
             R.id.action_search -> {
- //               SimpleMovieWorkerManager.startWork(this)
+                //               SimpleMovieWorkerManager.startWork(this)
 
             }
             R.id.action_update_all -> {
- //               Toast.makeText(this,"Удалить", Toast.LENGTH_LONG).show()
+                //               Toast.makeText(this,"Удалить", Toast.LENGTH_LONG).show()
                 SimpleMovieWorkerManager.startWork(this)
             }
             R.id.action_share -> {
-                Toast.makeText(this,"Поделиться", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Поделиться", Toast.LENGTH_LONG).show()
             }
             R.id.action_clear_filter -> {
-                Toast.makeText(this,"Отменить фильтр", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Отменить фильтр", Toast.LENGTH_LONG).show()
             }
         }
 

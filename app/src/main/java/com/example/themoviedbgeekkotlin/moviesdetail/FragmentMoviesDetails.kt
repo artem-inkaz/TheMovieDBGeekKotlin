@@ -33,28 +33,12 @@ class FragmentMoviesDetails : Fragment() {
     private var _binding: FragmentMoviesDetailsFragmentBinding? = null
     private val binding get() = _binding!!
 
-//    private val viewModel: FragmentMovieListViewModel by lazy {
-//        ViewModelProvider(this).get(FragmentMovieListViewModel::class.java)
-//    }
-
     private val viewModel: FragmentMoviesDetailsViewModel by viewModels { MoviesDetailViewModelFactory() }
 
     private var adapter: ActorAdapter? = null
 
     // Для загрузки из MovieList
     private lateinit var movieBundle: Movie
-
-    private val onLoadListener: MoviesLoader.MoviesLoaderListener =
-        object : MoviesLoader.MoviesLoaderListener {
-
-            override fun onLoaded(movieDto: MovieDto) {
- //               displayMovie(movieDto)
-            }
-
-            override fun onFailed(throwable: Throwable) {
-                //Обработка ошибки
-            }
-        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
