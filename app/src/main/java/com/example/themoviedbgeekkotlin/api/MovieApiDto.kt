@@ -29,16 +29,16 @@ data class MovieDto(
 )
 
 data class MovieDtoEx(
-        val id: Int,
-        val title: String?,
-        val overview: String?,
-        @SerializedName("backdrop_path")
-        val backdrop: String?,
-        @SerializedName("vote_average")
-        val ratings: Float,
-        val runtime: Int? = null,
-        @SerializedName("vote_count")
-        val reviews: Int
+    val id: Int,
+    val title: String?,
+    val overview: String?,
+    @SerializedName("backdrop_path")
+    val backdrop: String?,
+    @SerializedName("vote_average")
+    val ratings: Float,
+    val runtime: Int? = null,
+    @SerializedName("vote_count")
+    val reviews: Int
 )
 
 // genres
@@ -46,19 +46,16 @@ data class GenresDto(
     val genres: List<GenreDto>
 )
 
-
 data class GenreDto(
     val id: Int,
     val name: String
 )
 
 // actors
-
 data class ActorsDto(
     @SerializedName("cast")
     val actors: List<ActorDto>
 )
-
 
 data class ActorDto(
     val id: Int,

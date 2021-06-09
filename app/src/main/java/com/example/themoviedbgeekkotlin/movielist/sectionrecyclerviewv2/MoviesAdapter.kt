@@ -12,14 +12,13 @@ import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.ViewHolderMovieBinding
 import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
 import com.example.themoviedbgeekkotlin.model.Movie
-import com.example.themoviedbgeekkotlin.model.MovieGroup
-import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerview.ItemRecyclerviewAdapter
 
 class MoviesAdapter(
-    private var moviesclickListener: OnItemViewClickListener) :
+    private var moviesclickListener: OnItemViewClickListener
+) :
     RecyclerView.Adapter<MoviesAdapter.MovieViewHolder?>() {
 
-//    private val movies = listOf<Movie>()
+    //    private val movies = listOf<Movie>()
     private var movies: ArrayList<Movie> = ArrayList()
     private lateinit var binding: ViewHolderMovieBinding
 
@@ -39,7 +38,6 @@ class MoviesAdapter(
             .placeholder(R.drawable.ic_combined_shape)
             .fallback(R.drawable.ic_combined_shape)
             .centerCrop()
-
 
         val item = movies[position]
 
@@ -67,12 +65,9 @@ class MoviesAdapter(
 
     override fun getItemCount(): Int = movies.size
 
-  inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val title: TextView = itemView.findViewById(R.id.title)
         val poster: ImageView = itemView.findViewById(R.id.poster)
-
-//      override fun onClick(v: View) =
-//          moviesclickListener.onItemViewClick(movies[])
     }
 }

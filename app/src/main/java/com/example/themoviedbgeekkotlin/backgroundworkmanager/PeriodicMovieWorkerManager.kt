@@ -1,29 +1,15 @@
 package com.example.themoviedbgeekkotlin.backgroundworkmanager
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.work.*
-import com.example.androidacademy.data.Database_movies
-import com.example.themoviedbgeekkotlin.model.Movie
-import com.example.themoviedbgeekkotlin.model.MovieListRepository
-import com.example.themoviedbgeekkotlin.model.MovieListRepositoryImpl
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class PeriodicMovieWorkerManager(private val context: Context, params: WorkerParameters) :
-    Worker(context,params) {
+    Worker(context, params) {
 
     override fun doWork(): Result {
         return Result.success()
     }
-
-//    @SuppressLint("CheckResult")
-//    override fun createWork(): Single<Result> {
-//    }
-
-
 
     companion object {
         private const val PERIODIC_WORKER_TAG = "PeriodicWorkerTag"
@@ -39,12 +25,17 @@ class PeriodicMovieWorkerManager(private val context: Context, params: WorkerPar
         // Метод для создания PeriodicWorkRequest
         private fun createWorkRequest(data: Data): PeriodicWorkRequest {
             // Заменяем на PeriodicWorkRequest и добавляем интервал
-            return PeriodicWorkRequest.Builder(PeriodicMovieWorkerManager::class.java, 15, TimeUnit.MINUTES)
+            return PeriodicWorkRequest.Builder(
+                PeriodicMovieWorkerManager::class.java,
+                15,
+                TimeUnit.MINUTES
+            )
                 .setConstraints(createConstraints())
                 .setInputData(data)
                 .addTag(PERIODIC_WORKER_TAG)
                 .build()
         }
+
         // Метод для запуска PeriodicWorkRequest
         fun startWork(context: Context) {
             val work = createWorkRequest(Data.EMPTY)

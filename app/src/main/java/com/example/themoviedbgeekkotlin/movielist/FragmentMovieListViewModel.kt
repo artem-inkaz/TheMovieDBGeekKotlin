@@ -6,18 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.themoviedbgeekkotlin.api.MoviesApi
-import com.example.themoviedbgeekkotlin.api.convertMovieDtoToDomain
 import com.example.themoviedbgeekkotlin.api.convertMovieDtoToDomainV2
 import com.example.themoviedbgeekkotlin.api.convertToMovieGroup
 import com.example.themoviedbgeekkotlin.model.Movie
 import com.example.themoviedbgeekkotlin.model.MovieGroup
-import com.example.themoviedbgeekkotlin.model.MovieListRepository
-import com.example.themoviedbgeekkotlin.model.MovieListRepositoryImpl
 import kotlinx.coroutines.launch
-import java.util.Random
 
 class FragmentMovieListViewModel(
-        private val apiServiceMovie: MoviesApi
+    private val apiServiceMovie: MoviesApi
 ) : ViewModel() {
 
     private val _state = MutableLiveData<AppState>(AppState.Init)
@@ -26,7 +22,7 @@ class FragmentMovieListViewModel(
     private val _mutableLiveDataMovies = MutableLiveData<List<MovieGroup>>()
     val listMovies: LiveData<List<MovieGroup>> get() = _mutableLiveDataMovies
 
-    fun updateDate(){
+    fun updateDate() {
         loadNowPlaying()
     }
 
@@ -36,7 +32,7 @@ class FragmentMovieListViewModel(
             try {
                 _state.value = AppState.Loading
                 // получаем genres (жанры)
-               val genres = apiServiceMovie.getGenres()
+                val genres = apiServiceMovie.getGenres()
                 // получаем фильмы по типам
                 val moviesDtoNowPlaying = apiServiceMovie.getNowPlaying()
                 val moviesDtoPoular = apiServiceMovie.getMoviesPopular()
@@ -47,26 +43,37 @@ class FragmentMovieListViewModel(
                 val nameGroup3 = "TopRated"
                 val nameGroup4 = "Up Comming"
 
-                val moviesNowPlaying = convertMovieDtoToDomainV2(nameGroup1,moviesDtoNowPlaying.results,genres.genres)
-                val moviesNowPlayingV2 = convertToMovieGroup(nameGroup1,moviesNowPlaying as ArrayList<Movie>)
+                val moviesNowPlaying = convertMovieDtoToDomainV2(
+                    nameGroup1,
+                    moviesDtoNowPlaying.results,
+                    genres.genres
+                )
+                val moviesNowPlayingV2 =
+                    convertToMovieGroup(nameGroup1, moviesNowPlaying as ArrayList<Movie>)
 
-                val moviesPoular = convertMovieDtoToDomainV2(nameGroup2,moviesDtoPoular.results,genres.genres)
-                val moviesPoularV2 = convertToMovieGroup(nameGroup2, moviesPoular as ArrayList<Movie> )
+                val moviesPoular =
+                    convertMovieDtoToDomainV2(nameGroup2, moviesDtoPoular.results, genres.genres)
+                val moviesPoularV2 =
+                    convertToMovieGroup(nameGroup2, moviesPoular as ArrayList<Movie>)
 
-                val moviesTopRated = convertMovieDtoToDomainV2(nameGroup3,moviesDtoTopRated.results,genres.genres)
-                val moviesTopRatedV2 = convertToMovieGroup(nameGroup3, moviesTopRated as ArrayList<Movie>)
+                val moviesTopRated =
+                    convertMovieDtoToDomainV2(nameGroup3, moviesDtoTopRated.results, genres.genres)
+                val moviesTopRatedV2 =
+                    convertToMovieGroup(nameGroup3, moviesTopRated as ArrayList<Movie>)
 
-                val moviesUpComming = convertMovieDtoToDomainV2(nameGroup4,moviesDtoUpComming.results,genres.genres)
-                val moviesUpCommingV2 = convertToMovieGroup(nameGroup4,moviesUpComming as ArrayList<Movie>)
+                val moviesUpComming =
+                    convertMovieDtoToDomainV2(nameGroup4, moviesDtoUpComming.results, genres.genres)
+                val moviesUpCommingV2 =
+                    convertToMovieGroup(nameGroup4, moviesUpComming as ArrayList<Movie>)
 
-                _mutableLiveDataMovies.value = listOf(moviesNowPlayingV2,moviesPoularV2,moviesTopRatedV2,moviesUpCommingV2)
+                _mutableLiveDataMovies.value =
+                    listOf(moviesNowPlayingV2, moviesPoularV2, moviesTopRatedV2, moviesUpCommingV2)
                 _state.value = AppState.Success(listOf(moviesNowPlayingV2))
 
-            } catch (e:Exception) {
+            } catch (e: Exception) {
                 _state.value = AppState.Error("Ошибка загрузки данных")
                 Log.e(ViewModel::class.java.simpleName, "Error grab movies data ${e.message}")
             }
         }
     }
-
 }

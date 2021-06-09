@@ -2,12 +2,14 @@ package com.example.themoviedbgeekkotlin.api
 
 import com.example.themoviedbgeekkotlin.BuildConfig
 import com.example.themoviedbgeekkotlin.model.Movie
-import com.example.themoviedbgeekkotlin.model.MovieGroup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 // Конвертер чтобы в результирующем классе Movie были все нужные поля
-suspend fun convertMovieDtoToDomain(moviesDto:List<MovieDto>, genres: List<GenreDto>): List<Movie> =
+suspend fun convertMovieDtoToDomain(
+    moviesDto: List<MovieDto>,
+    genres: List<GenreDto>
+): List<Movie> =
     withContext(Dispatchers.Default) {
         val genresMap: Map<Int, GenreDto> = genres.associateBy { it.id }
 

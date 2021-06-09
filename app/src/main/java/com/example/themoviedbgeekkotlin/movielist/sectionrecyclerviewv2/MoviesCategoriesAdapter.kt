@@ -15,7 +15,8 @@ import com.example.themoviedbgeekkotlin.model.MovieGroup
 import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerviewv2.MoviesAdapter
 
 class MoviesCategoriesAdapter(
-    private var moviesclickListener: OnItemViewClickListener) :
+    private var moviesclickListener: OnItemViewClickListener
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder?>() {
 
     private val pool: RecyclerView.RecycledViewPool = RecyclerView.RecycledViewPool()
@@ -55,14 +56,8 @@ class MoviesCategoriesAdapter(
         (holder as? CategoryViewHolder)?.apply {
             title.text = item.group
             adapters[position].addItems(movieDataV2[position].movies)
-            moviesList.adapter=adapters[position]
+            moviesList.adapter = adapters[position]
             moviesList.setRecycledViewPool(pool)
-//                val lm =
-//                    LinearLayoutManager(moviesList.context, LinearLayoutManager.HORIZONTAL, false)
-//                layoutManager = lm
-//
-//                val ad = MoviesAdapter()
-//                adapter = ad
         }
     }
 

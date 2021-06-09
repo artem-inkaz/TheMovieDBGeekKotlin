@@ -7,7 +7,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 // Конвертер чтобы в результирующем классе Movie были все нужные поля
-suspend fun convertMovieDtoToDomainV2(nameGroup: String,moviesDto:List<MovieDto>, genres: List<GenreDto>) : List<Movie> =
+suspend fun convertMovieDtoToDomainV2(
+    nameGroup: String,
+    moviesDto: List<MovieDto>,
+    genres: List<GenreDto>
+): List<Movie> =
     withContext(Dispatchers.Default) {
         val genresMap: Map<Int, GenreDto> = genres.associateBy { it.id }
 
@@ -25,15 +29,13 @@ suspend fun convertMovieDtoToDomainV2(nameGroup: String,moviesDto:List<MovieDto>
                 reviews = movieDto.reviews,
                 genres = movieDto.genreIds.map {
                     genresMap[it]?.name.toString()
-                    }
+                }
             )
         }
     }
 
-suspend fun convertToMovieGroup(groupTitle: String, response: ArrayList<Movie> ) : MovieGroup =
-   withContext(Dispatchers.Default) {
+suspend fun convertToMovieGroup(groupTitle: String, response: ArrayList<Movie>): MovieGroup =
+    withContext(Dispatchers.Default) {
 
         MovieGroup(groupTitle, response)
     }
-
-

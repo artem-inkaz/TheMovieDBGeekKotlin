@@ -3,14 +3,14 @@ package com.example.themoviedbgeekkotlin.moviesdetail
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.ViewHolderActorBinding
 import com.example.themoviedbgeekkotlin.model.Actor
-import com.example.themoviedbgeekkotlin.model.Movie
-import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerview.ItemRecyclerviewAdapter
 
 class ActorAdapter : RecyclerView.Adapter<ActorAdapter.ActorViewHolder>() {
 
@@ -49,7 +49,8 @@ class ActorAdapter : RecyclerView.Adapter<ActorAdapter.ActorViewHolder>() {
                 .load(actor.photo_image)
                 .apply(imageOption)
                 .into(ivActorsImage)
-//            tvActorFullName.text = actors.fullName
+
+            tvActorFullName?.text = actor.name
         }
     }
 }

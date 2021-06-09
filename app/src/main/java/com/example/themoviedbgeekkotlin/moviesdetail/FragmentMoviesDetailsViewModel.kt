@@ -1,31 +1,41 @@
 package com.example.themoviedbgeekkotlin.moviesdetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.themoviedbgeekkotlin.api.MoviesApi
+import com.example.themoviedbgeekkotlin.api.convertActorDtoToDomain
+import com.example.themoviedbgeekkotlin.model.Actor
 import com.example.themoviedbgeekkotlin.model.MovieListRepository
 import com.example.themoviedbgeekkotlin.model.MovieListRepositoryImpl
+import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class FragmentMoviesDetailsViewModel(
-        private val liveDataToObserve: MutableLiveData<AppStateActors> = MutableLiveData())
- : ViewModel() {
-    private val repositoryImpl: MovieListRepository = MovieListRepositoryImpl()
+    private val apiService: MoviesApi
+) : ViewModel() {
 
-    fun getLiveData() = liveDataToObserve
+    private val _actors = MutableLiveData<List<Actor>>()
+    val actors: LiveData<List<Actor>> get() = _actors
 
-    //    fun getActorFromServer() = getDataFromServer()
-//    fun getActorFromLocalStorage() = getDataFromLocalStorage()
+    fun getActors(movieId: Int) {
+        viewModelScope.launch {
+            try {
+                // get actors
+                val resultRequest = apiService.getActors(movieId = movieId)
+                // get actors domain data
+                val actors = convertActorDtoToDomain(resultRequest.actors)
 
-//    fun getData(): LiveData<AppStateActors> {
-//        getActorFromLocalStorage()
-//        return liveDataToObserve
-//    }
+                _actors.value = actors
 
-//    private fun getDataFromLocalStorage() {
-//        liveDataToObserve.value = AppStateActors.Loading
-//        Thread {
-//            Thread.sleep(200)
-//            liveDataToObserve.postValue(AppStateActors.Success(repositoryImpl.getActorFromLocalStorage()))
-//        }.start()
-//    }
+            } catch (e: Exception) {
+                Log.e(
+                    FragmentMoviesDetailsViewModel::class.java.simpleName,
+                    "Error grab actors data ${e.message}"
+                )
+            }
+        }
+    }
 }
