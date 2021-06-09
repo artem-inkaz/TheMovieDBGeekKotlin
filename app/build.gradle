@@ -36,7 +36,7 @@ android {
             // If you decide to play with this app more than a few times,
             // please, create your own api key, so this one does not get banned:
             // https://www.themoviedb.org/documentation/api
-            buildConfigField "String", "API_KEY", "\"3847095cad8449ec1b9ca6240fa9102c\""
+//            buildConfigField "String", "API_KEY", "\"3847095cad8449ec1b9ca6240fa9102c\""
         }
     }
     compileOptions {
@@ -45,6 +45,13 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("themoviedbmap.properties").newDataInputStream())
+        def apiKey  = properties.getProperty("themoviedb_map_key", "")
+        it.buildConfigField "String", "THEMOVIEDB_API_KEY", apiKey
     }
 }
 
@@ -65,6 +72,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     // ViewModel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    //GSON
+    implementation 'com.google.code.gson:gson:2.8.6'
     // Okhttp
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

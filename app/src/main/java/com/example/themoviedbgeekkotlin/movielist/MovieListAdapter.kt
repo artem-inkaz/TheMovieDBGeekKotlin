@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.ViewHolderMovieBinding
 import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
@@ -40,10 +42,22 @@ class MovieListAdapter(private  val itemViewClickListener: OnItemViewClickListen
     }
 
     inner class MovieListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+//        companion object {
+            private val imageOption = RequestOptions()
+                .placeholder(R.drawable.ic_combined_shape)
+                .fallback(R.drawable.ic_combined_shape)
+                .centerCrop()
+//        }
+
         @SuppressLint("SetTextI18n")
         fun bind(movie: Movie) = with(binding) {
             title.text = movie.title
             poster.setImageResource(movie.poster)
+//            Glide.with(itemView.context)
+//                .load(movie.poster)
+//                .apply(imageOption)
+//                .into(poster)
             ageRating.text = movie.adult
             like.setImageResource(if (movie.like) R.drawable.ic_like else R.drawable.ic_like_empty)
             genres.text = movie.genres.name

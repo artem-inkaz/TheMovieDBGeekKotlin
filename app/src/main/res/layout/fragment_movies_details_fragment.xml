@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/imgTitlePoster"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="298dp"
             android:contentDescription="@string/image_of_main_poster"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
