@@ -24,7 +24,7 @@ import com.example.themoviedbgeekkotlin.movielist.FragmentMovieListViewModel
 import com.example.themoviedbgeekkotlin.moviesdetail.internet.MoviesLoader
 import com.google.android.material.snackbar.Snackbar
 
-class FragmentMoviesDetails1 : Fragment() {
+class FragmentMoviesDetails : Fragment() {
 
     private var _binding: FragmentMoviesDetailsFragmentBinding? = null
     private val binding get() = _binding!!
@@ -79,8 +79,8 @@ class FragmentMoviesDetails1 : Fragment() {
             APP_ACTIVITY.navController.navigate(R.id.action_moviesdetailFragment_to_movielistFragment)
         }
 
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
-        viewModel.getMovieFromLocalStorage()
+//        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
+//        viewModel.getMovieFromLocalStorage()
 
     }
 
@@ -100,25 +100,25 @@ class FragmentMoviesDetails1 : Fragment() {
 
 
     // Статус загрузки
-    private fun renderData(appState: AppState) {
-
-        when (appState) {
-            is AppState.Success -> {
-                adapter = ActorAdapter()
-                        .apply { setActor(appState.movie) }
-                binding.recyclerView.adapter = adapter
-                binding.recyclerView.adapter?.notifyDataSetChanged()
-            }
-            is AppState.Loading -> {
-            }
-            is AppState.Error -> {
-                Snackbar
-                        .make(binding.root, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
-                        .setAction(getString(R.string.reload)) { viewModel.getMovieFromLocalStorage() }
-                        .show()
-            }
-        }
-    }
+//    private fun renderData(appState: AppState) {
+//
+//        when (appState) {
+//            is AppState.Success -> {
+//                adapter = ActorAdapter()
+//                        .apply { setActor(appState.movie) }
+//                binding.recyclerView.adapter = adapter
+//                binding.recyclerView.adapter?.notifyDataSetChanged()
+//            }
+//            is AppState.Loading -> {
+//            }
+//            is AppState.Error -> {
+//                Snackbar
+//                        .make(binding.root, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
+//                        .setAction(getString(R.string.reload)) { viewModel.getMovieFromLocalStorage() }
+//                        .show()
+//            }
+//        }
+//    }
 
 
     override fun onDestroyView() {
@@ -129,8 +129,8 @@ class FragmentMoviesDetails1 : Fragment() {
     companion object {
         const val BUNDLE_EXTRA = "movie"
 
-        fun newInstance(bundle: Bundle): FragmentMoviesDetails1 {
-            val fragment = FragmentMoviesDetails1()
+        fun newInstance(bundle: Bundle): FragmentMoviesDetails {
+            val fragment = FragmentMoviesDetails()
             fragment.arguments = bundle
             return fragment
         }

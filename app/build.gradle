@@ -2,8 +2,9 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'org.jetbrains.kotlin.plugin.serialization'
-    id 'kotlin-parcelize'
+//    id 'kotlin-parcelize'
     id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -52,6 +53,10 @@ android {
         properties.load(project.rootProject.file("themoviedbmap.properties").newDataInputStream())
         def apiKey  = properties.getProperty("themoviedb_map_key", "")
         it.buildConfigField "String", "THEMOVIEDB_API_KEY", apiKey
+    }
+
+    androidExtensions {
+        experimental = true
     }
 }
 
@@ -110,4 +115,10 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
     implementation "androidx.work:work-rxjava2:$rootProject.workManager"
     implementation "androidx.work:work-runtime-ktx:$rootProject.workManager"
+
+    //groupie
+    implementation 'com.xwray:groupie:2.8.0'
+    implementation 'com.xwray:groupie-kotlin-android-extensions:2.8.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'androidx.cardview:cardview:1.0.0'
 }

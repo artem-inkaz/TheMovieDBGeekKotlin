@@ -4,16 +4,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.ViewHolderActorBinding
 import com.example.themoviedbgeekkotlin.model.Actor
 import com.example.themoviedbgeekkotlin.model.Movie
+import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerview.ItemRecyclerviewAdapter
 
 class ActorAdapter : RecyclerView.Adapter<ActorAdapter.ActorViewHolder>() {
 
-    private var actorsList = listOf<Movie>()
+    private var actorsList = listOf<Actor>()
     private lateinit var binding: ViewHolderActorBinding
 
-    fun setActor(data: List<Movie>) {
+    fun setActor(data: List<Actor>) {
         actorsList = data
         notifyDataSetChanged()
     }
@@ -35,9 +39,17 @@ class ActorAdapter : RecyclerView.Adapter<ActorAdapter.ActorViewHolder>() {
 
     inner class ActorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(movie: Movie) = with(binding) {
-            ivActorsImage.setImageResource(movie.actors.photo_image)
-            tvActorFullName.text = movie.actors.fullName
+        private val imageOption = RequestOptions()
+            .placeholder(R.drawable.ic_combined_shape)
+            .fallback(R.drawable.ic_combined_shape)
+            .centerCrop()
+
+        fun bind(actor: Actor) = with(binding) {
+            Glide.with(itemView.context)
+                .load(actor.photo_image)
+                .apply(imageOption)
+                .into(ivActorsImage)
+//            tvActorFullName.text = actors.fullName
         }
     }
 }

@@ -5,12 +5,13 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Actor(
-        val name: String = "",
-        val last_name: String = "",
-        val photo_image: Int = 0
+        val id: Int,
+        val name: String,
+//        val last_name: String = "",
+        val photo_image: String?
 ) : Parcelable
 {
-    val fullName: String
-        get() = "$name $last_name"
+//    val fullName: String
+//        get() = "$name $last_name"
 }
 
