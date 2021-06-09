@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.themoviedbgeekkotlin.backgroundworkmanager.SimpleMovieWorkerManager
 import com.example.themoviedbgeekkotlin.databinding.MainActivityBinding
 import com.example.themoviedbgeekkotlin.favourite.FragmentFavourite
 import com.example.themoviedbgeekkotlin.movielist.FragmentMovieList
@@ -83,9 +84,11 @@ class MainActivity : AppCompatActivity() {
         // получение item id
         when(item.itemId){
             R.id.action_search -> {
+                SimpleMovieWorkerManager.startWork(this)
             }
             R.id.action_update_all -> {
-                Toast.makeText(this,"Удалить", Toast.LENGTH_LONG).show()
+ //               Toast.makeText(this,"Удалить", Toast.LENGTH_LONG).show()
+                SimpleMovieWorkerManager.startWork(this)
             }
             R.id.action_share -> {
                 Toast.makeText(this,"Поделиться", Toast.LENGTH_LONG).show()

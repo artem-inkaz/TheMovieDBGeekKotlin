@@ -12,7 +12,7 @@ import com.example.themoviedbgeekkotlin.APP_ACTIVITY
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
 import com.example.themoviedbgeekkotlin.model.Movie
-import com.example.themoviedbgeekkotlin.moviesdetail.FragmentMoviesDetails
+import com.example.themoviedbgeekkotlin.moviesdetail.service.DetailsFragment
 
 class ContainerAdapter(private val context: Context, private val sections : List<RecyclerViewSection>) : RecyclerView.Adapter<ContainerAdapter.ViewHolder>() {
 
@@ -39,13 +39,14 @@ class ContainerAdapter(private val context: Context, private val sections : List
 //                ItemRecyclerviewAdapter(
 //                    section.items
 //                ).apply { setMovie(Database_movies().getMovies()) }
+
             // передача данных во фрагмент детали о фильме
             val adapter = ItemRecyclerviewAdapter(section.items, object  : OnItemViewClickListener {
                     override fun onItemViewClick(movie: Movie) {
                         val bundle = Bundle().apply {
-                            putParcelable(FragmentMoviesDetails.BUNDLE_EXTRA, movie)
+                            putParcelable(DetailsFragment.BUNDLE_EXTRA, movie)
                         }
-                        APP_ACTIVITY.navController.navigate(R.id.action_movielistFragment_to_moviesdetailFragment,bundle)
+                        APP_ACTIVITY.navController.navigate(R.id.action_movielistFragment_to_detailsFragment,bundle)
                     }
 
                 }).apply {
