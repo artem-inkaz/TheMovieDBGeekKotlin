@@ -1,4 +1,4 @@
-package com.example.androidacademy.adapter
+package com.example.themoviedbgeekkotlin.movielist.sectionrecyclerviewv2
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +18,7 @@ class MoviesCategoriesAdapter :
 
     private val pool: RecyclerView.RecycledViewPool = RecyclerView.RecycledViewPool()
 
-    private val adapters: List<MoviesAdapter> = listOf()
+    private val adapters: ArrayList<MoviesAdapter> = arrayListOf()
 
     private var movieData = listOf<Movie>()
     private var movieDataV2 = listOf<MovieGroup>()
@@ -46,6 +46,7 @@ class MoviesCategoriesAdapter :
                 parent,
                 false
             ).also {
+                adapters.add(MoviesAdapter())
                 Log.d("movieLog", "moviesAdapterCreate")
             }
         )
@@ -55,9 +56,13 @@ class MoviesCategoriesAdapter :
 
         val item = movieDataV2[position]
 
+        adapters[position].clear()
+        adapters[position].addItems(movieDataV2[position].movies)
+
         (holder as? CategoryViewHolder)?.apply {
             title.text = item.group
-//            moviesList.adapter = adapters[position]
+            adapters[position].addItems(movieDataV2[position].movies)
+            moviesList.adapter=adapters[position]
             moviesList.setRecycledViewPool(pool)
 //                val lm =
 //                    LinearLayoutManager(moviesList.context, LinearLayoutManager.HORIZONTAL, false)

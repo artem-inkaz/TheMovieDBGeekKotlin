@@ -11,6 +11,7 @@ import com.example.themoviedbgeekkotlin.APP_ACTIVITY
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
 import com.example.themoviedbgeekkotlin.model.Movie
+import com.example.themoviedbgeekkotlin.model.MovieGroup
 import com.example.themoviedbgeekkotlin.moviesdetail.service.DetailsFragment.Companion.BUNDLE_EXTRA
 
 class ContainerAdapter(
@@ -19,10 +20,16 @@ class ContainerAdapter(
 //    private var moviesclickListener: OnRecyclerMovieClickListener
     ) : RecyclerView.Adapter<ContainerAdapter.ViewHolder>() {
 
-    private var movieData= listOf<Movie>()
+    private var movieData= ArrayList<Movie>()
+    private var movieDataV2 = listOf<MovieGroup>()
 
-    fun setMovie(data: List<Movie>) {
+    fun setMovie(data: ArrayList<Movie>) {
         movieData = data
+        notifyDataSetChanged()
+    }
+//    fun addItems(movieGroupList: ArrayList<MovieGroup>) = movieDataV2.addAll(movieGroupList)
+    fun setMovieV2(data:List<MovieGroup>) {
+        movieDataV2 = data
         notifyDataSetChanged()
     }
 

@@ -18,7 +18,6 @@ class ItemRecyclerviewAdapter (
 
     private var movieData= listOf<Movie>()
 
-
     fun setMovie(data: List<Movie>) {
         movieData = data
         notifyDataSetChanged()

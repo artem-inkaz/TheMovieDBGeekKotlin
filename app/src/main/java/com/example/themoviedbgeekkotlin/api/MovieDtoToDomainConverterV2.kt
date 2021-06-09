@@ -30,7 +30,7 @@ suspend fun convertMovieDtoToDomainV2(nameGroup: String,moviesDto:List<MovieDto>
         }
     }
 
-suspend fun convertToMovieGroup(groupTitle: String, response: List<Movie> ) : MovieGroup =
+suspend fun convertToMovieGroup(groupTitle: String, response: ArrayList<Movie> ) : MovieGroup =
    withContext(Dispatchers.Default) {
 
         MovieGroup(groupTitle, response)
