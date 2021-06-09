@@ -2,13 +2,16 @@ package com.example.themoviedbgeekkotlin
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.toColor
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -79,12 +82,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     // клик по кнопочке меню
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         // получение item id
         when(item.itemId){
             R.id.action_search -> {
-                SimpleMovieWorkerManager.startWork(this)
+ //               SimpleMovieWorkerManager.startWork(this)
+
             }
             R.id.action_update_all -> {
  //               Toast.makeText(this,"Удалить", Toast.LENGTH_LONG).show()

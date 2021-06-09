@@ -22,5 +22,6 @@
         android:orderInCategory="5"
         android:title="@string/toolbar_title_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
+
         app:showAsAction="ifRoom" />
 </menu>

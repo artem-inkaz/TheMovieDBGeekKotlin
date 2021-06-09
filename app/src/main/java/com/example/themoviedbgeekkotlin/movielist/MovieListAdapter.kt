@@ -53,14 +53,14 @@ class MovieListAdapter(private  val itemViewClickListener: OnItemViewClickListen
         @SuppressLint("SetTextI18n")
         fun bind(movie: Movie) = with(binding) {
             title.text = movie.title
-            poster.setImageResource(movie.poster)
-//            Glide.with(itemView.context)
-//                .load(movie.poster)
-//                .apply(imageOption)
-//                .into(poster)
-            ageRating.text = movie.adult
+//          poster.setImageResource(movie.poster)
+            Glide.with(itemView.context)
+                .load(movie.poster)
+                .apply(imageOption)
+                .into(poster)
+//            ageRating.text = movie.adult
             like.setImageResource(if (movie.like) R.drawable.ic_like else R.drawable.ic_like_empty)
-            genres.text = movie.genres.name
+            genres.text = movie.genres.joinToString(",")
             ratingBar.rating = movie.ratings.toFloat()
             reviews.text = movie.reviews.toString() + " REVIEWS"
             duration.text = movie.runtime.toString() + " MIN"

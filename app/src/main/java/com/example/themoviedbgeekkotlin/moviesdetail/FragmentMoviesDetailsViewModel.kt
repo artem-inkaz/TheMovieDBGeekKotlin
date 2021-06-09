@@ -14,18 +14,18 @@ class FragmentMoviesDetailsViewModel(
     fun getLiveData() = liveDataToObserve
 
     //    fun getActorFromServer() = getDataFromServer()
-    fun getActorFromLocalStorage() = getDataFromLocalStorage()
+//    fun getActorFromLocalStorage() = getDataFromLocalStorage()
 
-    fun getData(): LiveData<AppStateActors> {
-        getActorFromLocalStorage()
-        return liveDataToObserve
-    }
+//    fun getData(): LiveData<AppStateActors> {
+//        getActorFromLocalStorage()
+//        return liveDataToObserve
+//    }
 
-    private fun getDataFromLocalStorage() {
-        liveDataToObserve.value = AppStateActors.Loading
-        Thread {
-            Thread.sleep(200)
-            liveDataToObserve.postValue(AppStateActors.Success(repositoryImpl.getActorFromLocalStorage()))
-        }.start()
-    }
+//    private fun getDataFromLocalStorage() {
+//        liveDataToObserve.value = AppStateActors.Loading
+//        Thread {
+//            Thread.sleep(200)
+//            liveDataToObserve.postValue(AppStateActors.Success(repositoryImpl.getActorFromLocalStorage()))
+//        }.start()
+//    }
 }
