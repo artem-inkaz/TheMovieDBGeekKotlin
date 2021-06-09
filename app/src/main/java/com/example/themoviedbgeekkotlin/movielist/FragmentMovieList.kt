@@ -6,22 +6,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.themoviedbgeekkotlin.APP_ACTIVITY
+import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.FragmentMovieListFragmentBinding
+import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
+import com.example.themoviedbgeekkotlin.model.Movie
 import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerview.ContainerAdapter
 import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerviewv2.MoviesCategoriesAdapter
+import com.example.themoviedbgeekkotlin.moviesdetail.FragmentMoviesDetails.Companion.BUNDLE_EXTRA
+import com.example.themoviedbgeekkotlin.moviesdetail.service.DetailsFragment
 import com.example.themoviedbgeekkotlin.notification.MoviesNotificationHelper
 import kotlinx.android.synthetic.main.fragment_movie_list_fragment.*
 
-class FragmentMovieList : Fragment() {
+class FragmentMovieList : Fragment(),OnItemViewClickListener {
+
+    // навигация
+    lateinit var navController: NavController
 
     private var _binding: FragmentMovieListFragmentBinding? = null
     private val binding get() = _binding!!
 
    private var adapter: ContainerAdapter? =null
 
-    private val adapterMoviesGroup by lazy { MoviesCategoriesAdapter() }
+    private val adapterMoviesGroup by lazy { MoviesCategoriesAdapter(this) }
 
     private var adapter2: MoviesCategoriesAdapter? =null
 
@@ -44,12 +57,11 @@ class FragmentMovieList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val moviesRecyclerView: RecyclerView = binding.movieListRecyclerView
-       adapter2  = MoviesCategoriesAdapter()
-//         adapter = ContainerAdapter(this,)
-//        binding.movieListRecyclerView.adapter  = adapter
- //       binding.movieListRecyclerView.layoutManager =
-//            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//        moviesRecyclerView.adapter = adapterMoviesGroup
+//
+       adapter2  = MoviesCategoriesAdapter(this)
         moviesRecyclerView.adapter = adapter2
+
         // отображаем нотификацию
         showNotification()
 
@@ -62,6 +74,7 @@ class FragmentMovieList : Fragment() {
         if (savedInstanceState == null) {
             viewModel.updateDate()
         }
+
     }
 
     override fun onStart() {
@@ -111,5 +124,16 @@ class FragmentMovieList : Fragment() {
 
     companion object {
         fun newInstance() = FragmentMovieList()
+    }
+
+    override fun onItemViewClick(movie: Movie) {
+        val bundle = Bundle().also {
+            it.putParcelable(BUNDLE_EXTRA, movie)
+        }
+
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).also {
+            it.navigate(R.id.moviesdetailFragment,bundle)
+        }
+//        navController.navigate(R.id.action_movielistFragment_to_moviesdetailFragment,bundle)
     }
 }

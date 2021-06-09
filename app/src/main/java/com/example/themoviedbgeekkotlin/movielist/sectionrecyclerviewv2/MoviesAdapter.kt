@@ -10,11 +10,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.ViewHolderMovieBinding
+import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
 import com.example.themoviedbgeekkotlin.model.Movie
 import com.example.themoviedbgeekkotlin.model.MovieGroup
 import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerview.ItemRecyclerviewAdapter
 
-class MoviesAdapter :
+class MoviesAdapter(
+    private var moviesclickListener: OnItemViewClickListener) :
     RecyclerView.Adapter<MoviesAdapter.MovieViewHolder?>() {
 
 //    private val movies = listOf<Movie>()
@@ -40,6 +42,11 @@ class MoviesAdapter :
 
 
         val item = movies[position]
+
+        holder.itemView.setOnClickListener {
+            moviesclickListener.onItemViewClick(movies[position])
+        }
+
 //        with(holder)= with(binding) {
         with(binding) {
             title.text = item.title
@@ -64,5 +71,8 @@ class MoviesAdapter :
 
         val title: TextView = itemView.findViewById(R.id.title)
         val poster: ImageView = itemView.findViewById(R.id.poster)
+
+//      override fun onClick(v: View) =
+//          moviesclickListener.onItemViewClick(movies[])
     }
 }

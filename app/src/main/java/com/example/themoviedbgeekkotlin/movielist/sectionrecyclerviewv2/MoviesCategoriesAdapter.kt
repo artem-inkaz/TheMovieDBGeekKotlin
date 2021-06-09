@@ -9,11 +9,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviedbgeekkotlin.R
+import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
 import com.example.themoviedbgeekkotlin.model.Movie
 import com.example.themoviedbgeekkotlin.model.MovieGroup
 import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerviewv2.MoviesAdapter
 
-class MoviesCategoriesAdapter :
+class MoviesCategoriesAdapter(
+    private var moviesclickListener: OnItemViewClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder?>() {
 
     private val pool: RecyclerView.RecycledViewPool = RecyclerView.RecycledViewPool()
@@ -30,15 +32,6 @@ class MoviesCategoriesAdapter :
         notifyDataSetChanged()
     }
 
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//        val rootView =
-//            LayoutInflater.from(parent.context).inflate(
-//                R.layout.view_holder_item_content_container_recycler,
-//                parent,
-//                false)
-//        return CategoryViewHolder(rootView)
-//    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         CategoryViewHolder(
             LayoutInflater.from(parent.context).inflate(
@@ -46,7 +39,7 @@ class MoviesCategoriesAdapter :
                 parent,
                 false
             ).also {
-                adapters.add(MoviesAdapter())
+                adapters.add(MoviesAdapter(moviesclickListener))
                 Log.d("movieLog", "moviesAdapterCreate")
             }
         )
