@@ -45,7 +45,7 @@ class FragmentMoviesDetails : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val movie = arguments?.getParcelable<Movie>(BUNDLE_EXTRA)
         binding.recyclerView.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerView.adapter = adapter
         movie?.let {
             binding.tvTitle.text = movie.title

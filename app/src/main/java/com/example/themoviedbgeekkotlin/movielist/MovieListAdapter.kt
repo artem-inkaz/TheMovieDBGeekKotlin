@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.ViewHolderMovieBinding
 import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
 import com.example.themoviedbgeekkotlin.model.Movie
 
+// Для вывода просто списком
 class MovieListAdapter(private  val itemViewClickListener: OnItemViewClickListener) : RecyclerView.Adapter<MovieListAdapter.MovieListViewHolder>() {
     private var movieData: List<Movie> = listOf()
     private lateinit var binding: ViewHolderMovieBinding
@@ -36,9 +39,9 @@ class MovieListAdapter(private  val itemViewClickListener: OnItemViewClickListen
         return movieData.size
     }
 
-    inner class MovieListViewHolder(view: View): RecyclerView.ViewHolder(view){
+    inner class MovieListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         @SuppressLint("SetTextI18n")
-        fun bind(movie: Movie) = with(binding){
+        fun bind(movie: Movie) = with(binding) {
             title.text = movie.title
             poster.setImageResource(movie.poster)
             ageRating.text = movie.adult
@@ -49,10 +52,9 @@ class MovieListAdapter(private  val itemViewClickListener: OnItemViewClickListen
             duration.text = movie.runtime.toString() + " MIN"
             dateRelease.text = movie.dateRelease
 
-            root.setOnClickListener{
+            root.setOnClickListener {
                 itemViewClickListener.onItemViewClick(movie)
             }
         }
     }
-
 }
