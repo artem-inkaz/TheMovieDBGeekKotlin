@@ -116,9 +116,7 @@ dependencies {
     implementation "androidx.work:work-rxjava2:$rootProject.workManager"
     implementation "androidx.work:work-runtime-ktx:$rootProject.workManager"
 
-    //groupie
-    implementation 'com.xwray:groupie:2.8.0'
-    implementation 'com.xwray:groupie-kotlin-android-extensions:2.8.0'
-    implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'androidx.cardview:cardview:1.0.0'
+    //Paging Library
+    implementation 'androidx.paging:paging-runtime-ktx:3.1.0-alpha01'
+
 }
