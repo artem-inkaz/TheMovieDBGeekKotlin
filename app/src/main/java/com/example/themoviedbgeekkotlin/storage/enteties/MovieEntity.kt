@@ -12,6 +12,7 @@ data class MovieEntity (
     val id: Long,
     val title: String,
     val overview: String?,
+    val dateRelease: String,
     val poster: String?,
     val backdrop: String?,
     val ratings: Float,
@@ -21,3 +22,16 @@ data class MovieEntity (
     val genres: String,
     val like: Boolean = false
 )
+
+//        val id: Int,
+//        val title: String,
+//        val overview: String?,
+//        val dateRelease: String,
+//        val poster: String,
+//        val backdrop: String,
+//        val ratings: Float,
+//        val adult: Boolean,
+//        val runtime: Int?,
+//        val reviews: Int,
+//        val genres: List<String>,
+//        val like: Boolean = false
