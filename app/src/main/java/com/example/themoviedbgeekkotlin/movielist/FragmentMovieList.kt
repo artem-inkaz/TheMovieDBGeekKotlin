@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.example.themoviedbgeekkotlin.App
+import com.example.themoviedbgeekkotlin.AppPreferences
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.FragmentMovieListFragmentBinding
 import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
@@ -21,6 +23,10 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
 
     private var _binding: FragmentMovieListFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private var adultSession: Boolean = false
+    private var landSession: String = "ru"
+
 
     // вариант ленивой инициализаии
     private val adapterMoviesGroup by lazy { MoviesCategoriesAdapter(this) }
@@ -45,23 +51,65 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
         adapter2 = MoviesCategoriesAdapter(this)
         moviesRecyclerView.adapter = adapter2
 
+        SearchBySetting()
         // отображаем нотификацию
         showNotification()
-
+        stateParams()
         setObservers()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            viewModel.updateDate()
+//            initPreferences()
+//            viewModel.loadMoviesFromApi(landSession,adultSession)
         }
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.updateDate()
+        initPreferences()
+        viewModel.loadMoviesFromApi(landSession,adultSession)
     }
+
+    private fun initPreferences(){
+        adultSession = if(AppPreferences.getAdult()) {
+            AppPreferences.getAdult()
+        } else false
+
+        landSession = if(AppPreferences.getLang()?.isNotEmpty() == true) {
+            AppPreferences.getLang().toString()
+        } else "ru"
+
+        stateParamsStart()
+    }
+    // присвоение перед записьб в AppPreferences
+    private fun stateParams() {
+        if (binding.searchLayout.checkAdult.isChecked)  adultSession = true
+        if (binding.searchLayout.editTextSearch.text.isNotEmpty())
+            landSession = binding.searchLayout.editTextSearch.text.toString()
+        else landSession = "ru"
+    }
+    // присвоение после инициализации AppPreferences
+    private fun stateParamsStart() {
+        if (adultSession == true) binding.searchLayout.checkAdult.isChecked = true
+        else binding.searchLayout.checkAdult.isChecked = false
+
+        if (landSession.isNotEmpty()) binding.searchLayout.editTextSearch.append(landSession)
+        else binding.searchLayout.editTextSearch.append("ru")
+    }
+
+
+    private fun SearchBySetting() {
+        binding.searchLayout.searchButton.setOnClickListener {
+        stateParams()
+        AppPreferences.setAdult(adultSession)
+        AppPreferences.setLang(landSession)
+        viewModel.loadMoviesFromApi(landSession, adultSession)
+            setObservers()
+    }
+    }
+
 
     private fun setObservers() {
         // observe movies data

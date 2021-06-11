@@ -56,6 +56,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(mToolbar)
         title = getString(R.string.title)
         initBottomNavigation()
+
+        // как только запустилинаше приложение проинициализируем наши настройки
+        AppPreferences.getPreference(this)
     }
 
     private fun initBottomNavigation() {

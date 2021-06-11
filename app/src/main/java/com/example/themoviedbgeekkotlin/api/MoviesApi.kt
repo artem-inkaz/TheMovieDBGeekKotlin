@@ -28,11 +28,11 @@ interface MoviesApi {
     @GET("movie/popular")
     suspend fun getMoviesPopular(
         @Query("api_key") key: String = BuildConfig.THEMOVIEDB_API_KEY,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int = 1,
 //        @Query("page") page: Int
 //        @Query("language") language: String = "ru",
-//        @Query("language") language: String
-//          @Query("adult") adult: Boolean
+        @Query("language") language: String,
+        @Query("adult") adult: Boolean
     ): MoviesDto
 
     /**
@@ -50,12 +50,11 @@ interface MoviesApi {
      */
     @GET("movie/now_playing")
     suspend fun getNowPlaying(
-        @Query("api_key") key: String = BuildConfig.THEMOVIEDB_API_KEY,
-        @Query("page") page: Int = 1
+        @Query("api_key") key: String,
+        @Query("page") page: Int=1,
 //        @Query("page") page: Int
-//        @Query("language") language: String = "ru",
-//        @Query("language") language: String
-//          @Query("adult") adult: Boolean
+        @Query("language") language: String,
+          @Query("adult") adult: Boolean
     ): MoviesDto
 
     /**
@@ -64,11 +63,11 @@ interface MoviesApi {
     @GET("movie/top_rated")
     suspend fun getTopRated(
         @Query("api_key") key: String = BuildConfig.THEMOVIEDB_API_KEY,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int = 1,
 //        @Query("page") page: Int
 //        @Query("language") language: String = "ru",
-//        @Query("language") language: String
-//          @Query("adult") adult: Boolean
+        @Query("language") language: String,
+        @Query("adult") adult: Boolean
 
     ): MoviesDto
 
@@ -78,10 +77,10 @@ interface MoviesApi {
     @GET("movie/upcoming")
     suspend fun getUpComming(
         @Query("api_key") key: String = BuildConfig.THEMOVIEDB_API_KEY,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int = 1,
 //        @Query("page") page: Int
 //        @Query("language") language: String = "ru",
-//        @Query("language") language: String
-//          @Query("adult") adult: Boolean
+        @Query("language") language: String,
+        @Query("adult") adult: Boolean
     ): MoviesDto
 }

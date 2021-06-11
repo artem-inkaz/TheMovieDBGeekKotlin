@@ -18,7 +18,7 @@ suspend fun convertMovieDtoToDomain(
                 id = movieDto.id,
                 title = movieDto.title,
                 overview = movieDto?.overview,
-                dateRelease = movieDto.dateRelease,
+                dateRelease = movieDto?.dateRelease,
                 poster = movieDto.poster.let { BuildConfig.BASE_IMAGE_URL + movieDto.poster },
                 backdrop = movieDto.backdrop.let { BuildConfig.BASE_IMAGE_URL + movieDto.backdrop },
                 ratings = movieDto.ratings / 2,

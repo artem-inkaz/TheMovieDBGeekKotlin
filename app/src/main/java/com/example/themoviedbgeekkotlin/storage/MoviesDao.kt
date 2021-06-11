@@ -9,9 +9,6 @@ interface MoviesDao {
     suspend fun insert(movie: MovieEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(movie: MovieEntity,groupId: Int?)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(movies: List<MovieEntity>)
 
     @Update

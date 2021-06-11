@@ -9,13 +9,6 @@ object DbContract {
      * ПРИМЕЧАНИЕ. В этом случае между фильмом и актерами не будет таблицы «многие ко многим».
      * Информация о том, в каком фильме принимает участие актер - хранится в таблице актеров
     * */
-    object GroupContract{
-        const val TABLE_NAME = "group"
-        const val COLUMN_NAME_ID = BaseColumns._ID
-
-        const val COLUMN_NAME_MOVIE_GROUP_ID = "group_id"
-
-    }
 
     object MovieContract {
         const val TABLE_NAME = "movie"
@@ -23,12 +16,6 @@ object DbContract {
         const val COLUMN_NAME_ID = BaseColumns._ID
 
         const val COLUMN_NAME_MOVIE_GROUP_ID = "group_id"
-    }
-
-    object MovieGroupContract{
-        const val TABLE_NAME = "movieGroup"
-        const val COLUMN_NAME_ID = BaseColumns._ID
-
     }
 
     object ActorContract {

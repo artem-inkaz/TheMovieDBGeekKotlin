@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.themoviedbgeekkotlin.BuildConfig
 import com.example.themoviedbgeekkotlin.api.MoviesApi
 import com.example.themoviedbgeekkotlin.api.convertMovieDtoToDomainV2
 import com.example.themoviedbgeekkotlin.api.convertToMovieGroup
@@ -27,10 +28,10 @@ class FragmentMovieListViewModel(
     var listMovieGroup = listOf<MovieGroup>()
 
     fun updateDate() {
-        loadMoviesFromApi()
+//        loadMoviesFromApi(apiKey:String,page:Int, lang:String, isAdult: Boolean)
     }
 
-    fun loadMoviesFromApi() {
+    fun loadMoviesFromApi(lang:String, isAdult: Boolean) {
 
         viewModelScope.launch {
             try {
@@ -38,10 +39,10 @@ class FragmentMovieListViewModel(
                 // получаем genres (жанры)
                 val genres = apiServiceMovie.getGenres()
                 // получаем фильмы по типам
-                val moviesDtoNowPlaying = apiServiceMovie.getNowPlaying()
-                val moviesDtoPoular = apiServiceMovie.getMoviesPopular()
-                val moviesDtoTopRated = apiServiceMovie.getTopRated()
-                val moviesDtoUpComming = apiServiceMovie.getUpComming()
+                val moviesDtoNowPlaying = apiServiceMovie.getNowPlaying(BuildConfig.THEMOVIEDB_API_KEY,2,lang,isAdult)
+                val moviesDtoPoular = apiServiceMovie.getMoviesPopular(BuildConfig.THEMOVIEDB_API_KEY,2,lang,isAdult)
+                val moviesDtoTopRated = apiServiceMovie.getTopRated(BuildConfig.THEMOVIEDB_API_KEY,2,lang,isAdult)
+                val moviesDtoUpComming = apiServiceMovie.getUpComming(BuildConfig.THEMOVIEDB_API_KEY,2,lang,isAdult)
                 val nameGroup1 = "Now Playing"
                 val nameGroup2 = "Poular"
                 val nameGroup3 = "TopRated"

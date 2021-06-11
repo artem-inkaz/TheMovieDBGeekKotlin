@@ -28,4 +28,5 @@
     <string name="toolbar_title_search">Поиск</string>
     <string name="type_movie">Now Playing</string>
     <string name="title">The Movie DB</string>
+    <string name="settingsbar">Настройки</string>
 </resources>
