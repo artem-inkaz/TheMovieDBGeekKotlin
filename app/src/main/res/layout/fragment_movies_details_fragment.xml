@@ -181,12 +181,21 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white"
-            android:text="@string/notes_edit"
-            style="@style/TextHeaderStyle"
+            tools:text="@string/notes_edit"
+            android:textColor="@color/black"
             android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNotes"
+            />
+
+        <Button
+            android:id="@+id/saveMovie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Сохранить"
+            app:layout_constraintTop_toBottomOf="@+id/notesMovie"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

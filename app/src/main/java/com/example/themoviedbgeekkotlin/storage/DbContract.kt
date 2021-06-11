@@ -3,7 +3,7 @@ package com.example.themoviedbgeekkotlin.storage
 import android.provider.BaseColumns
 
 object DbContract {
-    const val DATABASE_NAME = "Movies_db"
+    const val DATABASE_NAME = "MoviesNotes_db"
 
     /*
      * ПРИМЕЧАНИЕ. В этом случае между фильмом и актерами не будет таблицы «многие ко многим».

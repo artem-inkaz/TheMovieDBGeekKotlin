@@ -23,6 +23,7 @@ import com.example.themoviedbgeekkotlin.movielist.AppState
 import com.example.themoviedbgeekkotlin.movielist.FragmentMovieListViewModel
 import com.example.themoviedbgeekkotlin.movielist.MoviesListViewModelFactory
 import com.example.themoviedbgeekkotlin.moviesdetail.FragmentMoviesDetails
+import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
 import kotlinx.android.synthetic.main.fragment_favourite.*
 
 class FragmentFavourite : Fragment() {
@@ -57,14 +58,19 @@ class FragmentFavourite : Fragment() {
         recycler?.adapter = MovieHistoryAdapter(moviesclickListener)
 
         setObservers()
-        if (viewModel.movie.value.isNullOrEmpty()) {   // to avoid unnecessary request, when we came back from the detail screen
-            viewModel.loadMoviesFromDb()
+//        if (viewModel.movie.value.isNullOrEmpty()) {   // to avoid unnecessary request, when we came back from the detail screen
+//            viewModel.loadMoviesFromDb()
+//        }
+
+        if (viewModel.movieNotes.value.isNullOrEmpty()) {   // to avoid unnecessary request, when we came back from the detail screen
+            viewModel.loadMoviesNotesFromDb()
         }
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.loadMoviesFromDb()
+//        viewModel.loadMoviesFromDb()
+        viewModel.loadMoviesNotesFromDb()
 
     }
 
@@ -75,12 +81,19 @@ class FragmentFavourite : Fragment() {
 
     private fun setObservers() {
         // observe movies data
-        viewModel.movie.observe(viewLifecycleOwner, { movieList ->
+//        viewModel.movie.observe(viewLifecycleOwner, { movieList ->
+//            (recycler!!.adapter as MovieHistoryAdapter).apply {
+//                setMovie(movieList)
+//            }
+//            binding.progressBarHistory?.visibility = View.INVISIBLE
+//        })
+        viewModel.movieNotes.observe(viewLifecycleOwner, { movieList ->
             (recycler!!.adapter as MovieHistoryAdapter).apply {
-                setMovie(movieList)
+                setMovieNotes(movieList)
             }
             binding.progressBarHistory?.visibility = View.INVISIBLE
         })
+
 
         // observe status
         viewModel.state.observe(viewLifecycleOwner, { status ->
@@ -107,14 +120,24 @@ class FragmentFavourite : Fragment() {
 
     private val moviesclickListener = object : OnItemViewClickListener {
         override fun onItemViewClick(movie: Movie) {
-            Log.d("Parcel", "move.name = ${movie.title}")
-        val bundle = Bundle().also {
-            it.putParcelable(FragmentMoviesDetails.BUNDLE_EXTRA, movie)
+//            Log.d("Parcel", "move.name = ${movie.title}")
+//        val bundle = Bundle().also {
+//            it.putParcelable(FragmentMoviesDetails.BUNDLE_EXTRA, movie)
+//        }
+//
+//        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).also {
+//            it.navigate(R.id.moviesdetailFragment, bundle)
+//        }
         }
 
-        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).also {
-            it.navigate(R.id.moviesdetailFragment, bundle)
-        }
+        override fun onItemViewClickNotes(movie: MovieEntity) {
+            val bundle = Bundle().also {
+                it.putParcelable(FragmentMoviesDetails.BUNDLE_EXTRA_NOTES, movie)
+            }
+
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).also {
+                it.navigate(R.id.moviesdetailFragment, bundle)
+            }
         }
     }
 }

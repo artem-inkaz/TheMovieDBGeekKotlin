@@ -26,6 +26,7 @@ import com.example.themoviedbgeekkotlin.movielist.AppState
 import com.example.themoviedbgeekkotlin.movielist.FragmentMovieListViewModel
 import com.example.themoviedbgeekkotlin.movielist.MoviesListViewModelFactory
 import com.example.themoviedbgeekkotlin.moviesdetail.internet.MoviesLoader
+import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
 import com.google.android.material.snackbar.Snackbar
 
 class FragmentMoviesDetails : Fragment() {
@@ -35,10 +36,14 @@ class FragmentMoviesDetails : Fragment() {
 
     private val viewModel: FragmentMoviesDetailsViewModel by viewModels { MoviesDetailViewModelFactory() }
 
+    private val viewModelList: FragmentMovieListViewModel by viewModels { MoviesListViewModelFactory() }
+
     private var adapter: ActorAdapter? = null
 
     // Для загрузки из MovieList
     private lateinit var movieBundle: Movie
+
+    private lateinit var movieBundleNotes: MovieEntity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +63,19 @@ class FragmentMoviesDetails : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        movieBundle = arguments?.getParcelable<Movie>(BUNDLE_EXTRA)!!
+
+        if (arguments?.getParcelable<Movie>(BUNDLE_EXTRA) != null) {
+            movieBundle = arguments?.getParcelable<Movie>(BUNDLE_EXTRA)!!
+            movieBundle.let { movie ->
+                displayMovie(movie)
+            }
+        }
+        if (arguments?.getParcelable<MovieEntity>(BUNDLE_EXTRA_NOTES) != null) {
+            movieBundleNotes = arguments?.getParcelable<MovieEntity>(BUNDLE_EXTRA_NOTES)!!
+            movieBundleNotes.let { movieNotes ->
+                displayMovieNotes(movieNotes)
+            }
+        }
 
         adapter = ActorAdapter()
         binding.recyclerView.layoutManager =
@@ -71,9 +88,13 @@ class FragmentMoviesDetails : Fragment() {
             }
         }
 
-        movieBundle.let { movie ->
-            displayMovie(movie)
+
+        binding.saveMovie.setOnClickListener {
+            viewModelList.saveMoviesLocally(movieBundle, binding.notesMovie.text.toString())
         }
+
+//       saveMovieNotes(movieBundle, binding.notesMovie.text.toString())
+
         setObservers()
     }
 
@@ -88,6 +109,15 @@ class FragmentMoviesDetails : Fragment() {
 
         if (actors.isNotEmpty()) {
             (binding.recyclerView?.adapter as ActorAdapter).setActor(actors)
+        }
+    }
+
+    private fun saveMovieNotes(movie: Movie, notesMovie: String) {
+
+//        notesMovie = binding.notesMovie.text.toString()
+
+        binding.saveMovie.setOnClickListener {
+            viewModelList.saveMoviesLocally(movie, notesMovie)
         }
     }
 
@@ -106,6 +136,29 @@ class FragmentMoviesDetails : Fragment() {
                 viewModel.getActors(it.id)
                 viewModel.saveActorsLocally(it.id)
             }
+
+
+        }
+    }
+
+    private fun displayMovieNotes(movie: MovieEntity) {
+
+        with(binding) {
+            tvTitle.text = movie.title
+            Glide.with(root.context)
+                .load(BuildConfig.BASE_IMAGE_URL + movie.backdrop)
+                .apply(imageOption)
+                .into(imgTitlePoster)
+            ratingBar.rating = movie.ratings / 2
+            tvReviews.text = movie.reviews.toString() + " REVIEWS"
+            tvStorylineText.text = movie.overview
+            movie.let {
+                viewModel.getActors(it.id.toInt())
+                viewModel.saveActorsLocally(it.id.toInt())
+            }
+
+            notesMovie.append(movie.notes)
+
         }
     }
 
@@ -116,6 +169,7 @@ class FragmentMoviesDetails : Fragment() {
 
     companion object {
         const val BUNDLE_EXTRA = "movie"
+        const val BUNDLE_EXTRA_NOTES = "movieNotes"
 
         fun newInstance(bundle: Bundle): FragmentMoviesDetails {
             val fragment = FragmentMoviesDetails()

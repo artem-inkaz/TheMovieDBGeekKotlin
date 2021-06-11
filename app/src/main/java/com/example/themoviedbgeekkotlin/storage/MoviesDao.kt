@@ -22,4 +22,7 @@ interface MoviesDao {
 
     @Query("SELECT * FROM MOVIE ORDER BY _id ASC")
     suspend fun getAll(): List<MovieEntity>
+
+    @Query("SELECT * FROM MOVIE ")
+    suspend fun getAllNotes(): List<MovieEntity>
 }

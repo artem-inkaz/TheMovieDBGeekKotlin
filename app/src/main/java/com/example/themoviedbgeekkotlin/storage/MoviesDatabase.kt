@@ -7,7 +7,10 @@ import com.example.themoviedbgeekkotlin.App
 import com.example.themoviedbgeekkotlin.storage.enteties.ActorEntity
 import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
 
-@Database(entities = [MovieEntity::class, ActorEntity::class], version = 1, exportSchema = false)
+@Database(entities = [MovieEntity::class, ActorEntity::class],
+    version = 1,
+//    autoMigrations = {AutoMigration(from = 1, to = 2) },
+    exportSchema = false)
 abstract class MoviesDatabase: RoomDatabase() {
 
     abstract fun moviesDao(): MoviesDao

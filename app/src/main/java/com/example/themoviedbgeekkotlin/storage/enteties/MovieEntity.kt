@@ -1,8 +1,10 @@
 package com.example.themoviedbgeekkotlin.storage.enteties
 
+import android.os.Parcelable
 import androidx.room.*
 import com.example.themoviedbgeekkotlin.model.Group
 import com.example.themoviedbgeekkotlin.storage.DbContract
+import kotlinx.android.parcel.Parcelize
 
 //@Entity(tableName = DbContract.MovieContract.TABLE_NAME)
 //@Entity(
@@ -35,7 +37,7 @@ import com.example.themoviedbgeekkotlin.storage.DbContract
 ////     primaryKeys = arrayOf(DbContract.MovieContract.COLUMN_NAME_ID,DbContract.MovieContract.COLUMN_NAME_MOVIE_GROUP_ID),
 //   indices = [Index(value = [DbContract.MovieContract.COLUMN_NAME_MOVIE_GROUP_ID])]
 )
-
+@Parcelize
 data class MovieEntity (
     @PrimaryKey
     @ColumnInfo(name = DbContract.MovieContract.COLUMN_NAME_ID)
@@ -51,8 +53,9 @@ data class MovieEntity (
     val reviews: Int,
     val genres: String,
     val like: Boolean = false,
+    val notes: String
 //    @ColumnInfo(name = DbContract.MovieContract.COLUMN_NAME_MOVIE_GROUP_ID)
 //    val groupId: Int,
 //    @ColumnInfo(name = DbContract.MovieContract.CO)
 //    val groupName: String
-)
+) : Parcelable

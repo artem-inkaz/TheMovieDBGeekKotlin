@@ -1,6 +1,7 @@
 package com.example.themoviedbgeekkotlin.movielist
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,9 @@ import com.example.themoviedbgeekkotlin.model.Movie
 import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerviewv2.MoviesCategoriesAdapter
 import com.example.themoviedbgeekkotlin.moviesdetail.FragmentMoviesDetails.Companion.BUNDLE_EXTRA
 import com.example.themoviedbgeekkotlin.notification.MoviesNotificationHelper
+import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
+import kotlinx.android.parcel.Parcelize
+
 //import kotlinx.android.synthetic.main.fragment_movie_list_fragment.*
 
 class FragmentMovieList : Fragment(), OnItemViewClickListener {
@@ -153,7 +157,7 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
     }
 
     override fun onItemViewClick(movie: Movie) {
-        viewModel.saveMoviesLocally(movie)
+//        viewModel.saveMoviesLocally(movie)
         val bundle = Bundle().also {
             it.putParcelable(BUNDLE_EXTRA, movie)
         }
@@ -161,5 +165,16 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).also {
             it.navigate(R.id.moviesdetailFragment, bundle)
         }
+    }
+
+    override fun onItemViewClickNotes(movie: MovieEntity) {
+//        val bundle = Bundle().also {
+//            it.putParcelable(BUNDLE_EXTRA, movie)
+//        }
+//
+//        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).also {
+//            it.navigate(R.id.moviesdetailFragment, bundle)
+//        }
+
     }
 }

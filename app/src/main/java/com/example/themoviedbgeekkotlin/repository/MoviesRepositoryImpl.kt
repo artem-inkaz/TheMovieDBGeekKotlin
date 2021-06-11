@@ -12,8 +12,9 @@ interface MoviesRepository {
 
     /* movies */
     suspend fun getAllMovies(): List<Movie>
-    suspend fun writeMovieIntoDB(movie: Movie)
-    suspend fun rewriteMoviesListIntoDB(movies: List<Movie>)
+    suspend fun getAllMoviesEntity(): List<MovieEntity>
+    suspend fun writeMovieIntoDB(movie: Movie, notesMovie: String)
+    suspend fun rewriteMoviesListIntoDB(movies: List<Movie>,notesMovie: String)
     /* actors */
     suspend fun getAllActorsByMovie(movieId: Int): List<Actor>
     suspend fun rewriteActorsByMovieIntoDB(actors: List<Actor>, movieId: Int)
@@ -26,18 +27,24 @@ class MoviesRepositoryImpl : MoviesRepository {
     /** request movies from db */
     override suspend fun getAllMovies(): List<Movie> = withContext(Dispatchers.IO) {
         moviesDB.moviesDao().getAll().map { toMovieDomain(it) }
+
+    }
+
+    /** request movies from db with Notes */
+    override suspend fun getAllMoviesEntity(): List<MovieEntity> = withContext(Dispatchers.IO) {
+        moviesDB.moviesDao().getAllNotes().map {it}
     }
 
     /** add movies data into db*/
-    override suspend fun writeMovieIntoDB(movie: Movie) = withContext(Dispatchers.IO) {
-       moviesDB.moviesDao().insert(toMovieEntity(movie))
+    override suspend fun writeMovieIntoDB(movie: Movie, notesMovie: String) = withContext(Dispatchers.IO) {
+       moviesDB.moviesDao().insert(toMovieEntity(movie, notesMovie))
     }
 
     /** del movies and write new movies data set again */
-    override suspend fun rewriteMoviesListIntoDB(movies: List<Movie>) =
+    override suspend fun rewriteMoviesListIntoDB(movies: List<Movie>, notesMovie: String) =
         withContext(Dispatchers.IO) {
             moviesDB.moviesDao().deleteAll()
-            moviesDB.moviesDao().insertAll(movies.map { toMovieEntity(it) })
+            moviesDB.moviesDao().insertAll(movies.map { toMovieEntity(it, notesMovie) })
         }
 
     /** request actors by movie id */
@@ -68,21 +75,6 @@ class MoviesRepositoryImpl : MoviesRepository {
         movie = movieId.toLong()
     )
 
-    private fun toMovieEntity(movieDomain: Movie) = MovieEntity(
-        id = movieDomain.id.toLong(),
-        title = movieDomain.title,
-        overview = movieDomain.overview,
-        dateRelease = movieDomain.dateRelease?:"",
-        poster = movieDomain.poster,
-        backdrop = movieDomain.backdrop,
-        ratings = movieDomain.ratings,
-        adult = movieDomain.adult,
-        runtime = movieDomain.runtime,
-        reviews = movieDomain.reviews,
-        genres = movieDomain.genres.joinToString(","),
-        like = movieDomain.like
-    )
-
     private fun toMovieDomain(movieEntity: MovieEntity) = Movie(
         id = movieEntity.id.toInt(),
         title = movieEntity.title,
@@ -96,6 +88,39 @@ class MoviesRepositoryImpl : MoviesRepository {
         reviews = movieEntity.reviews,
         genres = movieEntity.genres.split(",").map { it.trim() },
         like = movieEntity.like
+
+    )
+
+    private fun toMovieEntity(movieDomain: Movie, notesMovie: String) = MovieEntity(
+        id = movieDomain.id.toLong(),
+        title = movieDomain.title,
+        overview = movieDomain.overview,
+        dateRelease = movieDomain.dateRelease?:"",
+        poster = movieDomain.poster,
+        backdrop = movieDomain.backdrop,
+        ratings = movieDomain.ratings,
+        adult = movieDomain.adult,
+        runtime = movieDomain.runtime,
+        reviews = movieDomain.reviews,
+        genres = movieDomain.genres.joinToString(","),
+        like = movieDomain.like,
+        notes = notesMovie
+    )
+
+    private fun toMovieEntityNotes(movieDomain: MovieEntity) = MovieEntity(
+        id = movieDomain.id.toLong(),
+        title = movieDomain.title,
+        overview = movieDomain.overview,
+        dateRelease = movieDomain.dateRelease?:"",
+        poster = movieDomain.poster,
+        backdrop = movieDomain.backdrop,
+        ratings = movieDomain.ratings,
+        adult = movieDomain.adult,
+        runtime = movieDomain.runtime,
+        reviews = movieDomain.reviews,
+        genres = movieDomain.genres,
+        like = movieDomain.like,
+        notes = movieDomain.notes
     )
 
 }
