@@ -10,11 +10,14 @@ import com.example.themoviedbgeekkotlin.api.convertActorDtoToDomain
 import com.example.themoviedbgeekkotlin.model.Actor
 import com.example.themoviedbgeekkotlin.model.MovieListRepository
 import com.example.themoviedbgeekkotlin.model.MovieListRepositoryImpl
+import com.example.themoviedbgeekkotlin.movielist.FragmentMovieListViewModel
+import com.example.themoviedbgeekkotlin.repository.MoviesRepositoryImpl
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class FragmentMoviesDetailsViewModel(
-    private val apiService: MoviesApi
+    private val apiService: MoviesApi,
+    private val repository: MoviesRepositoryImpl
 ) : ViewModel() {
 
     private val _actors = MutableLiveData<List<Actor>>()
@@ -34,6 +37,37 @@ class FragmentMoviesDetailsViewModel(
                 Log.e(
                     FragmentMoviesDetailsViewModel::class.java.simpleName,
                     "Error grab actors data ${e.message}"
+                )
+            }
+        }
+    }
+
+    fun saveActorsLocally(movieId: Int) {
+        if (!actors.value.isNullOrEmpty()) {
+            viewModelScope.launch {
+                repository.rewriteActorsByMovieIntoDB(actors.value!!, movieId)
+                Log.d(
+                    "ActorsDB",
+                    "Данные успешно сохранены: $movieId"
+                )
+            }
+        }
+    }
+
+    private fun loadActorsFromDb(movieId: Int) {
+        viewModelScope.launch {
+            try {
+                // load actors from database
+                val actorsDB = repository.getAllActorsByMovie(movieId)
+
+                if (actorsDB.isNotEmpty()) {
+                    _actors.value = actorsDB
+                }
+
+            } catch (e: Exception) {
+                Log.e(
+                    FragmentMovieListViewModel::class.java.simpleName,
+                    "Error grab actors data from DB: ${e.message}"
                 )
             }
         }

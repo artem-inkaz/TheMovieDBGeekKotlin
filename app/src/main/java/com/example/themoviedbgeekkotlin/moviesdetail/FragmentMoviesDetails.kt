@@ -104,6 +104,7 @@ class FragmentMoviesDetails : Fragment() {
             tvStorylineText.text = movie.overview
             movie.let {
                 viewModel.getActors(it.id)
+                viewModel.saveActorsLocally(it.id)
             }
         }
     }

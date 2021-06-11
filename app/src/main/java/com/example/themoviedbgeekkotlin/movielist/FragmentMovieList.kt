@@ -27,7 +27,6 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
     private var adultSession: Boolean = false
     private var landSession: String = "ru"
 
-
     // вариант ленивой инициализаии
     private val adapterMoviesGroup by lazy { MoviesCategoriesAdapter(this) }
 
@@ -99,7 +98,6 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
         else binding.searchLayout.editTextSearch.append("ru")
     }
 
-
     private fun SearchBySetting() {
         binding.searchLayout.searchButton.setOnClickListener {
         stateParams()
@@ -109,7 +107,6 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
             setObservers()
     }
     }
-
 
     private fun setObservers() {
         // observe movies data
@@ -156,6 +153,7 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
     }
 
     override fun onItemViewClick(movie: Movie) {
+        viewModel.saveMoviesLocally(movie)
         val bundle = Bundle().also {
             it.putParcelable(BUNDLE_EXTRA, movie)
         }

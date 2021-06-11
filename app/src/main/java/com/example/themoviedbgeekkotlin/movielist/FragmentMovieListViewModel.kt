@@ -21,9 +21,12 @@ class FragmentMovieListViewModel(
 
     private val _state = MutableLiveData<AppState>(AppState.Init)
     val state: LiveData<AppState> get() = _state
-
+    // для списка фильмов из сети
     private val _mutableLiveDataMovies = MutableLiveData<List<MovieGroup>>()
     val listMovies: LiveData<List<MovieGroup>> get() = _mutableLiveDataMovies
+    // для сохранения фильма в БД историю просмотра
+    private val _mutableLiveDataMovie = MutableLiveData<List<Movie>>()
+    val movie: LiveData<List<Movie>> get() = _mutableLiveDataMovie
 
     var listMovieGroup = listOf<MovieGroup>()
 
@@ -77,9 +80,9 @@ class FragmentMovieListViewModel(
                 _state.value = AppState.Success(listMovieGroup)
 
                 // don't rewrite with empty data
-                if (!listMovieGroup.isNullOrEmpty()) {
-                    saveMoviesLocally()
-                }
+//                if (!listMovieGroup.isNullOrEmpty()) {
+//                    saveMoviesLocally()
+//                }
 
             } catch (e: Exception) {
                 if (state.value != AppState.Success(listMovieGroup)) {
@@ -90,10 +93,37 @@ class FragmentMovieListViewModel(
         }
     }
 
-    private fun saveMoviesLocally() {
-        if (!listMovies.value.isNullOrEmpty()) {
+    fun saveMoviesLocally(movie: Movie) {
+//        if (!movie.value) {
             viewModelScope.launch {
-//                repository.rewriteMoviesListIntoDB(listMovies.value!!)
+                repository.writeMovieIntoDB(movie)
+
+            }
+//        }
+    }
+
+    fun loadMoviesFromDb() {
+        viewModelScope.launch {
+            try {
+                _state.value = AppState.Loading
+
+                // load movies from database
+                val moviesDB = repository.getAllMovies()
+
+                // if there are any movies - show them and show success state
+                if (moviesDB.isNotEmpty()) {
+                    _mutableLiveDataMovie.value = moviesDB
+                    _state.value = AppState.SuccessMovie(moviesDB)
+                } else {
+                    _state.value = AppState.EmptyDataSet
+                }
+
+            } catch (e: java.lang.Exception) {
+                _state.value = AppState.EmptyDataSet
+                Log.e(
+                    FragmentMovieListViewModel::class.java.simpleName,
+                    "Error grab movies data from DB: ${e.message}"
+                )
             }
         }
     }

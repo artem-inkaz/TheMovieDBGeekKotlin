@@ -83,21 +83,6 @@ class MoviesRepositoryImpl : MoviesRepository {
         like = movieDomain.like
     )
 
-    private fun toListMovieEntity(movieDomain: Movie) = MovieEntity(
-            id = movieDomain.id.toLong(),
-            title = movieDomain.title,
-            overview = movieDomain.overview,
-            dateRelease = movieDomain.dateRelease?:"",
-            poster = movieDomain.poster,
-            backdrop = movieDomain.backdrop,
-            ratings = movieDomain.ratings,
-            adult = movieDomain.adult,
-            runtime = movieDomain.runtime,
-            reviews = movieDomain.reviews,
-            genres = movieDomain.genres.joinToString(","),
-            like = movieDomain.like,
-    )
-
     private fun toMovieDomain(movieEntity: MovieEntity) = Movie(
         id = movieEntity.id.toInt(),
         title = movieEntity.title,
