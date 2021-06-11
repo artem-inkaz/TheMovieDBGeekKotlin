@@ -6,10 +6,15 @@ import com.example.themoviedbgeekkotlin.model.MovieGroup
 import com.example.themoviedbgeekkotlin.storage.MoviesDatabase
 import com.example.themoviedbgeekkotlin.storage.enteties.ActorEntity
 import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
+//import com.example.themoviedbgeekkotlin.storage.enteties.MovieGroupEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 interface MoviesRepository {
+    /* movies group */
+//    suspend fun getAllMoviesGroup(): List<MovieGroup>
+//    suspend fun writeMovieGroupIntoDB(movieGroup: MovieGroup)
+//    suspend fun rewriteMovieGroupsListIntoDB(movies: List<MovieGroup>)
     /* movies */
     suspend fun getAllMovies(): List<Movie>
     suspend fun writeMovieIntoDB(movie: Movie)
@@ -29,15 +34,15 @@ class MoviesRepositoryImpl : MoviesRepository {
     }
 
     /** add movies data into db*/
-    override suspend fun writeMovieIntoDB(movie: Movie) = withContext(Dispatchers.IO) {
-        moviesDB.moviesDao().insert(toMovieEntity(movie))
+    override suspend fun writeMovieIntoDB(movie: Movie,groupId: Int) = withContext(Dispatchers.IO) {
+       moviesDB.moviesDao().insertAll(toMovieEntity(movie, groupId))
     }
 
     /** del movies and write new movies data set again */
-    override suspend fun rewriteMoviesListIntoDB(movies: List<Movie>) =
+    override suspend fun rewriteMoviesListIntoDB(movies: List<Movie>,groupId: Int) =
         withContext(Dispatchers.IO) {
             moviesDB.moviesDao().deleteAll()
-            moviesDB.moviesDao().insertAll(movies.map { toMovieEntity(it) })
+            moviesDB.moviesDao().insertAll(movies.map { toMovieEntity(it, groupId) })
         }
 
     /** request actors by movie id */
@@ -68,8 +73,8 @@ class MoviesRepositoryImpl : MoviesRepository {
         movie = movieId.toLong()
     )
 
-    private fun toMovieEntity(movieDomain: Movie) = MovieEntity(
-        id = movieDomain.id.toLong(),
+    private fun toMovieEntity(movieDomain: Movie,groupId: Int) = MovieEntity(
+        movieId = movieDomain.id.toLong(),
         title = movieDomain.title,
         overview = movieDomain.overview,
         dateRelease = movieDomain.dateRelease,
@@ -80,11 +85,28 @@ class MoviesRepositoryImpl : MoviesRepository {
         runtime = movieDomain.runtime,
         reviews = movieDomain.reviews,
         genres = movieDomain.genres.joinToString(","),
-        like = movieDomain.like
+        like = movieDomain.like,
+        groupId = groupId
+    )
+
+    private fun toListMovieEntity(movieDomain: List<Movie>,groupId: Int) = MovieEntity(
+            movieId = movieDomain.toLong(),
+            title = movieDomain.title,
+            overview = movieDomain.overview,
+            dateRelease = movieDomain.dateRelease,
+            poster = movieDomain.poster,
+            backdrop = movieDomain.backdrop,
+            ratings = movieDomain.ratings,
+            adult = movieDomain.adult,
+            runtime = movieDomain.runtime,
+            reviews = movieDomain.reviews,
+            genres = movieDomain.genres.joinToString(","),
+            like = movieDomain.like,
+            groupId = groupId
     )
 
     private fun toMovieDomain(movieEntity: MovieEntity) = Movie(
-        id = movieEntity.id.toInt(),
+        id = movieEntity.movieId.toInt(),
         title = movieEntity.title,
         overview = movieEntity.overview,
         dateRelease = movieEntity.dateRelease,
@@ -97,6 +119,7 @@ class MoviesRepositoryImpl : MoviesRepository {
         genres = movieEntity.genres.split(",").map { it.trim() },
         like = movieEntity.like
     )
+
 }
 //        val id: Int,
 //        val title: String,

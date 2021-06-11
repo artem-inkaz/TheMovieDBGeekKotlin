@@ -10,10 +10,12 @@ import com.example.themoviedbgeekkotlin.api.convertMovieDtoToDomainV2
 import com.example.themoviedbgeekkotlin.api.convertToMovieGroup
 import com.example.themoviedbgeekkotlin.model.Movie
 import com.example.themoviedbgeekkotlin.model.MovieGroup
+import com.example.themoviedbgeekkotlin.repository.MoviesRepository
 import kotlinx.coroutines.launch
 
 class FragmentMovieListViewModel(
-    private val apiServiceMovie: MoviesApi
+    private val apiServiceMovie: MoviesApi,
+    private val repository: MoviesRepository
 ) : ViewModel() {
 
     private val _state = MutableLiveData<AppState>(AppState.Init)
@@ -22,11 +24,13 @@ class FragmentMovieListViewModel(
     private val _mutableLiveDataMovies = MutableLiveData<List<MovieGroup>>()
     val listMovies: LiveData<List<MovieGroup>> get() = _mutableLiveDataMovies
 
+    var listMovieGroup = listOf<MovieGroup>()
+
     fun updateDate() {
-        loadNowPlaying()
+        loadMoviesFromApi()
     }
 
-    fun loadNowPlaying() {
+    fun loadMoviesFromApi() {
 
         viewModelScope.launch {
             try {
@@ -66,13 +70,29 @@ class FragmentMovieListViewModel(
                 val moviesUpCommingV2 =
                     convertToMovieGroup(nameGroup4, moviesUpComming as ArrayList<Movie>)
 
-                _mutableLiveDataMovies.value =
-                    listOf(moviesNowPlayingV2, moviesPoularV2, moviesTopRatedV2, moviesUpCommingV2)
-                _state.value = AppState.Success(listOf(moviesNowPlayingV2))
+                listMovieGroup =listOf(moviesNowPlayingV2, moviesPoularV2, moviesTopRatedV2, moviesUpCommingV2)
+
+                _mutableLiveDataMovies.value = listMovieGroup
+                _state.value = AppState.Success(listMovieGroup)
+
+                // don't rewrite with empty data
+                if (!listMovieGroup.isNullOrEmpty()) {
+                    saveMoviesLocally()
+                }
 
             } catch (e: Exception) {
-                _state.value = AppState.Error("Ошибка загрузки данных")
+                if (state.value != AppState.Success(listMovieGroup)) {
+                    _state.value = AppState.Error("Ошибка загрузки данных")
+                }
                 Log.e(ViewModel::class.java.simpleName, "Error grab movies data ${e.message}")
+            }
+        }
+    }
+
+    private fun saveMoviesLocally() {
+        if (!listMovies.value.isNullOrEmpty()) {
+            viewModelScope.launch {
+//                repository.rewriteMoviesListIntoDB(listMovies.value!!)
             }
         }
     }

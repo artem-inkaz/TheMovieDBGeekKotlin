@@ -15,7 +15,7 @@ import com.example.themoviedbgeekkotlin.model.Movie
 import com.example.themoviedbgeekkotlin.movielist.sectionrecyclerviewv2.MoviesCategoriesAdapter
 import com.example.themoviedbgeekkotlin.moviesdetail.FragmentMoviesDetails.Companion.BUNDLE_EXTRA
 import com.example.themoviedbgeekkotlin.notification.MoviesNotificationHelper
-import kotlinx.android.synthetic.main.fragment_movie_list_fragment.*
+//import kotlinx.android.synthetic.main.fragment_movie_list_fragment.*
 
 class FragmentMovieList : Fragment(), OnItemViewClickListener {
 
