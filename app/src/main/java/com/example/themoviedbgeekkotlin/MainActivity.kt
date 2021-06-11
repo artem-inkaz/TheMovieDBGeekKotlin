@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         // получение item id
         when (item.itemId) {
             R.id.action_search -> {
-                //               SimpleMovieWorkerManager.startWork(this)
+                //  SimpleMovieWorkerManager.startWork(this)
 
             }
             R.id.action_update_all -> {

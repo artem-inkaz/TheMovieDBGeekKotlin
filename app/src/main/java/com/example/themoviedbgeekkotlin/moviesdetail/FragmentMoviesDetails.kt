@@ -42,7 +42,7 @@ class FragmentMoviesDetails : Fragment() {
 
     // Для загрузки из MovieList
     private lateinit var movieBundle: Movie
-
+    // Для загрузки из History
     private lateinit var movieBundleNotes: MovieEntity
 
     override fun onCreateView(
@@ -52,11 +52,6 @@ class FragmentMoviesDetails : Fragment() {
         _binding = FragmentMoviesDetailsFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
-    }
-
-    override fun onStart() {
-        super.onStart()
-
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -88,12 +83,9 @@ class FragmentMoviesDetails : Fragment() {
             }
         }
 
-
         binding.saveMovie.setOnClickListener {
             viewModelList.saveMoviesLocally(movieBundle, binding.notesMovie.text.toString())
         }
-
-//       saveMovieNotes(movieBundle, binding.notesMovie.text.toString())
 
         setObservers()
     }
@@ -112,15 +104,6 @@ class FragmentMoviesDetails : Fragment() {
         }
     }
 
-    private fun saveMovieNotes(movie: Movie, notesMovie: String) {
-
-//        notesMovie = binding.notesMovie.text.toString()
-
-        binding.saveMovie.setOnClickListener {
-            viewModelList.saveMoviesLocally(movie, notesMovie)
-        }
-    }
-
     private fun displayMovie(movie: Movie) {
 
         with(binding) {
@@ -136,8 +119,6 @@ class FragmentMoviesDetails : Fragment() {
                 viewModel.getActors(it.id)
                 viewModel.saveActorsLocally(it.id)
             }
-
-
         }
     }
 
@@ -156,9 +137,7 @@ class FragmentMoviesDetails : Fragment() {
                 viewModel.getActors(it.id.toInt())
                 viewModel.saveActorsLocally(it.id.toInt())
             }
-
             notesMovie.append(movie.notes)
-
         }
     }
 

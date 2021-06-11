@@ -21,6 +21,7 @@ class App : Application() {
                 NotificationManagerCompat.IMPORTANCE_DEFAULT, false,
                 getString(R.string.app_name), "Канал THEMOVIEDB - приложения."
         )
+        //Теперь мы сможем отправить уведомление.
     }
 
     companion object {
@@ -32,4 +33,3 @@ class App : Application() {
         fun repository(): MoviesRepositoryImpl = repository
     }
 }
-//Теперь мы сможем отправить уведомление.

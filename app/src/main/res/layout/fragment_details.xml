@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingBottom="@dimen/view_big_gap"   >
+        android:paddingBottom="@dimen/view_big_gap">
 
         <ImageView
             android:id="@+id/imgTitlePoster"
@@ -164,20 +164,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvCast"
             tools:itemCount="2"
-            tools:listitem="@layout/view_holder_actor"
-            />
+            tools:listitem="@layout/view_holder_actor" />
 
         <EditText
             android:id="@+id/notesMovie"
+            style="@style/TextHeaderStyle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/white"
-            tools:text="Заметка"
-            style="@style/TextHeaderStyle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-            />
+            tools:text="Заметка" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

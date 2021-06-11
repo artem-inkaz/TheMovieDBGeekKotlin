@@ -16,13 +16,14 @@ import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
 
 // Для вывода просто списком
 class MovieHistoryAdapter(
-    private val itemViewClickListener: OnItemViewClickListener) :
+    private val itemViewClickListener: OnItemViewClickListener
+) :
     RecyclerView.Adapter<MovieHistoryAdapter.MovieListViewHolder>() {
 
     private var movieData: List<Movie> = listOf()
     private var movieDataNotes: List<MovieEntity> = listOf()
-    
-//    private lateinit var binding: ViewHolderMovieBinding
+
+    //    private lateinit var binding: ViewHolderMovieBinding
     private lateinit var binding: ListItemHistoryMovieBinding
 
     //    fun bindMovie(data: List<Movie>) {
@@ -35,13 +36,13 @@ class MovieHistoryAdapter(
         movieDataNotes = data
         notifyDataSetChanged()
     }
-    
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): MovieListViewHolder {
-        binding = ListItemHistoryMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding =
+            ListItemHistoryMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MovieListViewHolder(binding.root)
     }
 
@@ -70,22 +71,16 @@ class MovieHistoryAdapter(
 //        }
 
         @SuppressLint("SetTextI18n")
-        // //       fun bind(movie: Movie) = with(binding) {
-           fun bind(movie: MovieEntity) = with(binding) {
+//       fun bind(movie: Movie) = with(binding) {
+        fun bind(movie: MovieEntity) = with(binding) {
             title.text = movie.title
 //          poster.setImageResource(movie.poster)
             Glide.with(itemView.context)
                 .load(movie.poster)
                 .apply(imageOption)
                 .into(poster)
-//            ageRating.text = movie.adult
-//            like.setImageResource(if (movie.like) R.drawable.ic_like else R.drawable.ic_like_empty)
             subtitle.text = movie.genres
-//            subtitle.text = movie.genres.joinToString(",")
             rating.text = movie.ratings.toString()
-//            reviews.text = movie.reviews.toString() + " REVIEWS"
-//            duration.text = movie.runtime.toString() + " MIN"
-//            dateRelease.text = movie.dateRelease
             notes.text = movie.notes
             root.setOnClickListener {
 //                itemViewClickListener.onItemViewClick(movie)

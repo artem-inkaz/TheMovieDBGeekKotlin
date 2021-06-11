@@ -51,10 +51,10 @@ interface MoviesApi {
     @GET("movie/now_playing")
     suspend fun getNowPlaying(
         @Query("api_key") key: String,
-        @Query("page") page: Int=1,
+        @Query("page") page: Int = 1,
 //        @Query("page") page: Int
         @Query("language") language: String,
-          @Query("adult") adult: Boolean
+        @Query("adult") adult: Boolean
     ): MoviesDto
 
     /**

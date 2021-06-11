@@ -21,8 +21,6 @@ import com.example.themoviedbgeekkotlin.notification.MoviesNotificationHelper
 import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
 import kotlinx.android.parcel.Parcelize
 
-//import kotlinx.android.synthetic.main.fragment_movie_list_fragment.*
-
 class FragmentMovieList : Fragment(), OnItemViewClickListener {
 
     private var _binding: FragmentMovieListFragmentBinding? = null
@@ -30,9 +28,6 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
 
     private var adultSession: Boolean = false
     private var landSession: String = "ru"
-
-    // вариант ленивой инициализаии
-    private val adapterMoviesGroup by lazy { MoviesCategoriesAdapter(this) }
 
     private var adapter2: MoviesCategoriesAdapter? = null
 
@@ -64,35 +59,35 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-//            initPreferences()
-//            viewModel.loadMoviesFromApi(landSession,adultSession)
         }
     }
 
     override fun onStart() {
         super.onStart()
         initPreferences()
-        viewModel.loadMoviesFromApi(landSession,adultSession)
+        viewModel.loadMoviesFromApi(landSession, adultSession)
     }
 
-    private fun initPreferences(){
-        adultSession = if(AppPreferences.getAdult()) {
+    private fun initPreferences() {
+        adultSession = if (AppPreferences.getAdult()) {
             AppPreferences.getAdult()
         } else false
 
-        landSession = if(AppPreferences.getLang()?.isNotEmpty() == true) {
+        landSession = if (AppPreferences.getLang()?.isNotEmpty() == true) {
             AppPreferences.getLang().toString()
         } else "ru"
 
         stateParamsStart()
     }
+
     // присвоение перед записьб в AppPreferences
     private fun stateParams() {
-        if (binding.searchLayout.checkAdult.isChecked)  adultSession = true
+        if (binding.searchLayout.checkAdult.isChecked) adultSession = true
         if (binding.searchLayout.editTextSearch.text.isNotEmpty())
             landSession = binding.searchLayout.editTextSearch.text.toString()
         else landSession = "ru"
     }
+
     // присвоение после инициализации AppPreferences
     private fun stateParamsStart() {
         if (adultSession == true) binding.searchLayout.checkAdult.isChecked = true
@@ -104,12 +99,12 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
 
     private fun SearchBySetting() {
         binding.searchLayout.searchButton.setOnClickListener {
-        stateParams()
-        AppPreferences.setAdult(adultSession)
-        AppPreferences.setLang(landSession)
-        viewModel.loadMoviesFromApi(landSession, adultSession)
+            stateParams()
+            AppPreferences.setAdult(adultSession)
+            AppPreferences.setLang(landSession)
+            viewModel.loadMoviesFromApi(landSession, adultSession)
             setObservers()
-    }
+        }
     }
 
     private fun setObservers() {
@@ -149,7 +144,6 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
         MoviesNotificationHelper.createMoviesNotification(
             requireContext(), "Супер Уведомление", "Это уведомление для отладки", "", true
         )
-
     }
 
     companion object {
@@ -157,6 +151,7 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
     }
 
     override fun onItemViewClick(movie: Movie) {
+        // сохранение при клике по записи MovieList
 //        viewModel.saveMoviesLocally(movie)
         val bundle = Bundle().also {
             it.putParcelable(BUNDLE_EXTRA, movie)
@@ -168,13 +163,5 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
     }
 
     override fun onItemViewClickNotes(movie: MovieEntity) {
-//        val bundle = Bundle().also {
-//            it.putParcelable(BUNDLE_EXTRA, movie)
-//        }
-//
-//        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).also {
-//            it.navigate(R.id.moviesdetailFragment, bundle)
-//        }
-
     }
 }

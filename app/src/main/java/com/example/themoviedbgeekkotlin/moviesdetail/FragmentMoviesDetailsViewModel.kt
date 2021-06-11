@@ -8,8 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.themoviedbgeekkotlin.api.MoviesApi
 import com.example.themoviedbgeekkotlin.api.convertActorDtoToDomain
 import com.example.themoviedbgeekkotlin.model.Actor
-import com.example.themoviedbgeekkotlin.model.MovieListRepository
-import com.example.themoviedbgeekkotlin.model.MovieListRepositoryImpl
 import com.example.themoviedbgeekkotlin.movielist.FragmentMovieListViewModel
 import com.example.themoviedbgeekkotlin.repository.MoviesRepositoryImpl
 import kotlinx.coroutines.launch

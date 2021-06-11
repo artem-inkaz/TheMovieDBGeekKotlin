@@ -14,7 +14,8 @@ interface MoviesRepository {
     suspend fun getAllMovies(): List<Movie>
     suspend fun getAllMoviesEntity(): List<MovieEntity>
     suspend fun writeMovieIntoDB(movie: Movie, notesMovie: String)
-    suspend fun rewriteMoviesListIntoDB(movies: List<Movie>,notesMovie: String)
+    suspend fun rewriteMoviesListIntoDB(movies: List<Movie>, notesMovie: String)
+
     /* actors */
     suspend fun getAllActorsByMovie(movieId: Int): List<Actor>
     suspend fun rewriteActorsByMovieIntoDB(actors: List<Actor>, movieId: Int)
@@ -32,13 +33,14 @@ class MoviesRepositoryImpl : MoviesRepository {
 
     /** request movies from db with Notes */
     override suspend fun getAllMoviesEntity(): List<MovieEntity> = withContext(Dispatchers.IO) {
-        moviesDB.moviesDao().getAllNotes().map {it}
+        moviesDB.moviesDao().getAllNotes().map { it }
     }
 
     /** add movies data into db*/
-    override suspend fun writeMovieIntoDB(movie: Movie, notesMovie: String) = withContext(Dispatchers.IO) {
-       moviesDB.moviesDao().insert(toMovieEntity(movie, notesMovie))
-    }
+    override suspend fun writeMovieIntoDB(movie: Movie, notesMovie: String) =
+        withContext(Dispatchers.IO) {
+            moviesDB.moviesDao().insert(toMovieEntity(movie, notesMovie))
+        }
 
     /** del movies and write new movies data set again */
     override suspend fun rewriteMoviesListIntoDB(movies: List<Movie>, notesMovie: String) =
@@ -95,7 +97,7 @@ class MoviesRepositoryImpl : MoviesRepository {
         id = movieDomain.id.toLong(),
         title = movieDomain.title,
         overview = movieDomain.overview,
-        dateRelease = movieDomain.dateRelease?:"",
+        dateRelease = movieDomain.dateRelease ?: "",
         poster = movieDomain.poster,
         backdrop = movieDomain.backdrop,
         ratings = movieDomain.ratings,
@@ -111,7 +113,7 @@ class MoviesRepositoryImpl : MoviesRepository {
         id = movieDomain.id.toLong(),
         title = movieDomain.title,
         overview = movieDomain.overview,
-        dateRelease = movieDomain.dateRelease?:"",
+        dateRelease = movieDomain.dateRelease ?: "",
         poster = movieDomain.poster,
         backdrop = movieDomain.backdrop,
         ratings = movieDomain.ratings,
@@ -122,17 +124,4 @@ class MoviesRepositoryImpl : MoviesRepository {
         like = movieDomain.like,
         notes = movieDomain.notes
     )
-
 }
-//        val id: Int,
-//        val title: String,
-//        val overview: String?,
-//        val dateRelease: String,
-//        val poster: String,
-//        val backdrop: String,
-//        val ratings: Float,
-//        val adult: Boolean,
-//        val runtime: Int?,
-//        val reviews: Int,
-//        val genres: List<String>,
-//        val like: Boolean = false

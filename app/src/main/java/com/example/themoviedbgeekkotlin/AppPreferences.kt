@@ -1,6 +1,5 @@
 package com.example.themoviedbgeekkotlin
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 
@@ -13,41 +12,40 @@ object AppPreferences {
     private lateinit var mPreferences: SharedPreferences
 
     // получаем настройки из контекста
-    fun  getPreference(context: Context): SharedPreferences {
+    fun getPreference(context: Context): SharedPreferences {
         mPreferences = context.getSharedPreferences(NAME_PREF, Context.MODE_PRIVATE)
         return mPreferences
     }
 
     // задаем был авторизован пользователь или нет
-    fun  setAdult(initAdult: Boolean){
+    fun setAdult(initAdult: Boolean) {
         mPreferences.edit()
-            .putBoolean(INIT_ADULT,initAdult)
+            .putBoolean(INIT_ADULT, initAdult)
             .apply()
     }
+
     // передаем тип БД
-    fun setLang(lang: String){
+    fun setLang(lang: String) {
         mPreferences.edit()
-            .putString(INIT_LANG,lang)
+            .putString(INIT_LANG, lang)
             .apply()
     }
 
     // получение из наших настроек Adult
-    fun getAdult():Boolean{
+    fun getAdult(): Boolean {
         //в случае если не был установлен флаг Adult
-        return mPreferences.getBoolean(INIT_ADULT,false)
+        return mPreferences.getBoolean(INIT_ADULT, false)
     }
 
     // получение из наших настроек Lang
     fun getLang(): String? {
         //в случае если не был установлен флаг Adult
-        return mPreferences.getString(INIT_LANG,"ru")
+        return mPreferences.getString(INIT_LANG, "ru")
     }
 
-
-    fun deleteAllPrefs(){
+    fun deleteAllPrefs() {
         mPreferences.edit()
             .clear()
             .apply()
     }
-
 }

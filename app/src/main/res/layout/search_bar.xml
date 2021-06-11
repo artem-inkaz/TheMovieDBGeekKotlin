@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/text_under_image"
+    android:id="@+id/searchBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/searchBar">
+    android:background="@color/text_under_image">
 
     <TextView
         android:id="@+id/titleBar"
@@ -14,30 +13,28 @@
         android:layout_height="50dp"
         android:fontFamily="@font/roboto_bold"
         android:padding="10dp"
+        android:text="@string/settingsbar"
         android:textColor="#000000"
         android:textSize="20sp"
-        android:text="@string/settingsbar"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
         android:id="@+id/checkAdult"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_gravity="center|top"
+        android:layout_marginLeft="10dp"
         android:fontFamily="@font/roboto_bold"
         android:gravity="center"
         android:text="@string/adult"
-        android:layout_marginLeft="10dp"
         android:textColor="#000000"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="144dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/titleBar"
-        >
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="144dp">
 
     </CheckBox>
 
@@ -46,17 +43,16 @@
         android:layout_width="80dp"
         android:layout_height="50dp"
         android:layout_gravity="end|top"
+        android:layout_marginLeft="20dp"
         android:fontFamily="@font/roboto_bold"
         android:hint="@string/en"
-        android:layout_marginLeft="20dp"
-        android:textSize="20sp"
         android:paddingBottom="10dp"
-        tools:layout_editor_absoluteX="254dp"
-        tools:layout_editor_absoluteY="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/checkAdult"
-        >
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="254dp"
+        tools:layout_editor_absoluteY="0dp">
 
     </EditText>
 
@@ -66,11 +62,10 @@
         android:layout_height="50dp"
         android:layout_marginLeft="25dp"
         android:background="@drawable/ic_search_page"
-        tools:layout_editor_absoluteX="323dp"
-        tools:layout_editor_absoluteY="2dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/editTextSearch"
-        />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="323dp"
+        tools:layout_editor_absoluteY="2dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,17 +1,13 @@
 package com.example.themoviedbgeekkotlin.favourite
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviedbgeekkotlin.R
@@ -24,7 +20,6 @@ import com.example.themoviedbgeekkotlin.movielist.FragmentMovieListViewModel
 import com.example.themoviedbgeekkotlin.movielist.MoviesListViewModelFactory
 import com.example.themoviedbgeekkotlin.moviesdetail.FragmentMoviesDetails
 import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
-import kotlinx.android.synthetic.main.fragment_favourite.*
 
 class FragmentFavourite : Fragment() {
 
@@ -34,13 +29,7 @@ class FragmentFavourite : Fragment() {
     private var recycler: RecyclerView? = null
     private var progressBar: ProgressBar? = null
 
-//    private val viewModel: FragmentFavouriteViewModel by lazy {
-//        ViewModelProvider(this).get(FragmentFavouriteViewModel::class.java)
-//    }
-
     private val viewModel: FragmentMovieListViewModel by viewModels { MoviesListViewModelFactory() }
-
-//    private val viewModel: MoviesListViewModel by viewModels { MoviesViewModelFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +47,7 @@ class FragmentFavourite : Fragment() {
         recycler?.adapter = MovieHistoryAdapter(moviesclickListener)
 
         setObservers()
+        // без заметок
 //        if (viewModel.movie.value.isNullOrEmpty()) {   // to avoid unnecessary request, when we came back from the detail screen
 //            viewModel.loadMoviesFromDb()
 //        }
@@ -69,6 +59,7 @@ class FragmentFavourite : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        // без заметок
 //        viewModel.loadMoviesFromDb()
         viewModel.loadMoviesNotesFromDb()
 

@@ -37,11 +37,7 @@ class FragmentMovieListViewModel(
 
     var listMovieGroup = listOf<MovieGroup>()
 
-    fun updateDate() {
-//        loadMoviesFromApi(apiKey:String,page:Int, lang:String, isAdult: Boolean)
-    }
-
-    fun loadMoviesFromApi(lang:String, isAdult: Boolean) {
+    fun loadMoviesFromApi(lang: String, isAdult: Boolean) {
 
         viewModelScope.launch {
             try {
@@ -49,10 +45,18 @@ class FragmentMovieListViewModel(
                 // получаем genres (жанры)
                 val genres = apiServiceMovie.getGenres()
                 // получаем фильмы по типам
-                val moviesDtoNowPlaying = apiServiceMovie.getNowPlaying(BuildConfig.THEMOVIEDB_API_KEY,2,lang,isAdult)
-                val moviesDtoPoular = apiServiceMovie.getMoviesPopular(BuildConfig.THEMOVIEDB_API_KEY,2,lang,isAdult)
-                val moviesDtoTopRated = apiServiceMovie.getTopRated(BuildConfig.THEMOVIEDB_API_KEY,2,lang,isAdult)
-                val moviesDtoUpComming = apiServiceMovie.getUpComming(BuildConfig.THEMOVIEDB_API_KEY,2,lang,isAdult)
+                val moviesDtoNowPlaying =
+                    apiServiceMovie.getNowPlaying(BuildConfig.THEMOVIEDB_API_KEY, 2, lang, isAdult)
+                val moviesDtoPoular = apiServiceMovie.getMoviesPopular(
+                    BuildConfig.THEMOVIEDB_API_KEY,
+                    2,
+                    lang,
+                    isAdult
+                )
+                val moviesDtoTopRated =
+                    apiServiceMovie.getTopRated(BuildConfig.THEMOVIEDB_API_KEY, 2, lang, isAdult)
+                val moviesDtoUpComming =
+                    apiServiceMovie.getUpComming(BuildConfig.THEMOVIEDB_API_KEY, 2, lang, isAdult)
                 val nameGroup1 = "Now Playing"
                 val nameGroup2 = "Poular"
                 val nameGroup3 = "TopRated"
@@ -81,7 +85,8 @@ class FragmentMovieListViewModel(
                 val moviesUpCommingV2 =
                     convertToMovieGroup(nameGroup4, moviesUpComming as ArrayList<Movie>)
 
-                listMovieGroup =listOf(moviesNowPlayingV2, moviesPoularV2, moviesTopRatedV2, moviesUpCommingV2)
+                listMovieGroup =
+                    listOf(moviesNowPlayingV2, moviesPoularV2, moviesTopRatedV2, moviesUpCommingV2)
 
                 _mutableLiveDataMovies.value = listMovieGroup
                 _state.value = AppState.Success(listMovieGroup)
@@ -101,14 +106,12 @@ class FragmentMovieListViewModel(
     }
 
     fun saveMoviesLocally(movie: Movie, notesMovie: String) {
-//        if (!movie.value) {
-            viewModelScope.launch {
-                repository.writeMovieIntoDB(movie, notesMovie)
-
-            }
-//        }
+        viewModelScope.launch {
+            repository.writeMovieIntoDB(movie, notesMovie)
+        }
     }
 
+    // без заметок
     fun loadMoviesFromDb() {
         viewModelScope.launch {
             try {
@@ -116,7 +119,7 @@ class FragmentMovieListViewModel(
 
                 // load movies from database
 //                val moviesDB = repository.getAllMoviesEntity()
-               val moviesDB = repository.getAllMovies()
+                val moviesDB = repository.getAllMovies()
                 // if there are any movies - show them and show success state
                 if (moviesDB.isNotEmpty()) {
                     _mutableLiveDataMovie.value = moviesDB
@@ -142,7 +145,7 @@ class FragmentMovieListViewModel(
 
                 // load movies from database
                 val moviesDB = repository.getAllMoviesEntity()
-//                val moviesDB = repository.getAllMovies()
+
                 // if there are any movies - show them and show success state
                 if (moviesDB.isNotEmpty()) {
                     _mutableLiveDataMovieNotes.value = moviesDB
