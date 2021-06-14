@@ -1,6 +1,8 @@
 package com.example.themoviedbgeekkotlin
 
 import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.toColor
 import androidx.fragment.app.Fragment
@@ -74,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.action_ratings -> {
+                    navController.navigate(R.id.ratingFragment)
                     true
                 }
                 else -> true
@@ -84,6 +88,27 @@ class MainActivity : AppCompatActivity() {
     // создадим меню
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_toolbar, menu)
+        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searItem = menu?.findItem(R.id.action_search)
+        val searchView = searItem?.actionView as SearchView
+        searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchView.clearFocus()
+                searchView.setQuery("", false)
+                searItem.collapseActionView()
+                val bundle = Bundle()
+                bundle.putString("SEARCH_MOVIE", query?.trim())
+                val navController = findNavController(R.id.nav_host_fragment)
+                navController.navigate(R.id.ratingFragment, bundle)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                //TODO("Not yet implemented")
+                return false
+            }
+        })
         return true
     }
 

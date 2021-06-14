@@ -3,8 +3,6 @@ package com.example.themoviedbgeekkotlin.storage
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.themoviedbgeekkotlin.App
 import com.example.themoviedbgeekkotlin.storage.enteties.ActorEntity
 import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
@@ -22,10 +20,14 @@ abstract class MoviesDatabase : RoomDatabase() {
 
     /**
      * https://medium.com/androiddevelopers/understanding-migrations-with-room-f01e04b07929
+     * https://medium.com/androiddevelopers/7-steps-to-room-27a5fe5f99b2
+     * https://medium.com/androiddevelopers/testing-room-migrations-be93cdb0d975
+     * https://github.com/android/architecture-components-samples/tree/master/PersistenceMigrationsSample
     */
 // Нужно увеличить version = 1, на version = 2
 //    val MIGRATION_1_2: Migration = object : Migration(1, 2) {
 //        override fun migrate(database: SupportSQLiteDatabase) {
+        // Способ 2
 //            // Поскольку мы не изменяли таблицу, здесь больше нечего делать.
 //        }
     //Способ 2

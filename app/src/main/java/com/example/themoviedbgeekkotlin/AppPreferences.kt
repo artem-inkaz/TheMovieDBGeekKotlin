@@ -9,6 +9,8 @@ object AppPreferences {
     private const val INIT_LANG = "INIT_LANG"
     private const val NAME_PREF = "PREFERENCES"
 
+    private const val NAME_QUERY = "SEARCH_QUERY"
+
     private lateinit var mPreferences: SharedPreferences
 
     // получаем настройки из контекста
@@ -17,14 +19,14 @@ object AppPreferences {
         return mPreferences
     }
 
-    // задаем был авторизован пользователь или нет
+    // задаем параметры Adult
     fun setAdult(initAdult: Boolean) {
         mPreferences.edit()
             .putBoolean(INIT_ADULT, initAdult)
             .apply()
     }
 
-    // передаем тип БД
+    // передаем язык
     fun setLang(lang: String) {
         mPreferences.edit()
             .putString(INIT_LANG, lang)
@@ -47,5 +49,18 @@ object AppPreferences {
         mPreferences.edit()
             .clear()
             .apply()
+    }
+
+    // сохраняем строку запроса
+    fun setSearchQuery(searchQuery: String) {
+        mPreferences.edit()
+            .putString(NAME_QUERY, searchQuery)
+            .apply()
+    }
+
+    // получение из наших настроек строку запроса
+    fun getSearchQuery(): String? {
+        //в случае если не был установлен флаг Adult
+        return mPreferences.getString(NAME_QUERY, "")
     }
 }

@@ -59,6 +59,13 @@ class FragmentMoviesDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (arguments?.getParcelable<Movie>(BUNDLE_EXTRA_RATING) != null) {
+            movieBundle = arguments?.getParcelable<Movie>(BUNDLE_EXTRA_RATING)!!
+            movieBundle.let { movie ->
+                displayMovie(movie)
+            }
+        }
+
         if (arguments?.getParcelable<Movie>(BUNDLE_EXTRA) != null) {
             movieBundle = arguments?.getParcelable<Movie>(BUNDLE_EXTRA)!!
             movieBundle.let { movie ->
@@ -149,6 +156,7 @@ class FragmentMoviesDetails : Fragment() {
     companion object {
         const val BUNDLE_EXTRA = "movie"
         const val BUNDLE_EXTRA_NOTES = "movieNotes"
+        const val BUNDLE_EXTRA_RATING = "movieRating"
 
         fun newInstance(bundle: Bundle): FragmentMoviesDetails {
             val fragment = FragmentMoviesDetails()

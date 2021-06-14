@@ -10,6 +10,20 @@ import retrofit2.http.Query
  */
 interface MoviesApi {
 
+    /**
+     * https://ru.wikipedia.org/wiki/ISO_3166-1 - region
+     * https://snipp.ru/handbk/iso-639-1 - language
+     */
+
+    @GET("search/movie")
+    suspend fun findMovies(
+        @Query("api_key") key: String = BuildConfig.THEMOVIEDB_API_KEY,
+        @Query("query") query: String,
+        @Query("language") language: String,
+        @Query("include_adult") adult: Boolean,
+        @Query("region") region: String,
+    ): MoviesDto
+
     @GET("genre/movie/list")
     suspend fun getGenres(@Query("api_key") key: String = BuildConfig.THEMOVIEDB_API_KEY): GenresDto
 

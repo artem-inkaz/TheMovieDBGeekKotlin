@@ -33,6 +33,7 @@
         android:name="com.example.themoviedbgeekkotlin.favourite.FragmentFavourite"
         android:label="fragment_favourite"
         tools:layout="@layout/fragment_favourite"/>
+
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.example.themoviedbgeekkotlin.moviesdetail.service.DetailsFragment"
@@ -41,5 +42,9 @@
             android:id="@+id/action_detailsFragment_to_movielistFragment"
             app:destination="@id/movielistFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/ratingFragment"
+        android:name="com.example.themoviedbgeekkotlin.ratings.RatingFragment"
+        android:label="RatingFragment" />
 
 </navigation>
