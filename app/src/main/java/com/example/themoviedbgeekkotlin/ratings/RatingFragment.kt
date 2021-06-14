@@ -18,6 +18,7 @@ import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.RatingFragmentBinding
 import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
 import com.example.themoviedbgeekkotlin.model.Movie
+import com.example.themoviedbgeekkotlin.movielist.AppState
 import com.example.themoviedbgeekkotlin.moviesdetail.FragmentMoviesDetails
 import com.example.themoviedbgeekkotlin.ratings.adapter.MovieRatingAdapter
 import com.example.themoviedbgeekkotlin.ratings.viewmodel.RatingViewModel
@@ -77,11 +78,13 @@ class RatingFragment : Fragment() {
         super.onStart()
         initpreferences()
         viewModel.onSearchQuery(searchString, "ru", true, "RU")
+        viewModel.fetchPopularMovies("ru", true)
     }
 
     private fun setObservers() {
-
-        viewModel.searchMoviesLiveData.observe(viewLifecycleOwner, { movieList ->
+        // если есть параметры
+        viewModel.moviesMediatorData.observe(viewLifecycleOwner, { movieList ->
+//        viewModel.searchMoviesLiveData.observe(viewLifecycleOwner, { movieList ->
             (recycler!!.adapter as MovieRatingAdapter).apply {
                 setMovie(movieList)
                 notifyDataSetChanged()
@@ -89,23 +92,25 @@ class RatingFragment : Fragment() {
             binding.progressBarRating?.visibility = View.INVISIBLE
         })
 
+        viewModel.fetchPopularMovies("ru", true)
+
         // observe status
-//        viewModel.state.observe(viewLifecycleOwner, { status ->
-//            when (status) {
-//                is AppState.Init, is AppState.Success -> {
-//                    binding.progressBarHistory?.visibility = View.INVISIBLE
-//                }
-//                is AppState.Loading -> {
-//                    binding.progressBarHistory?.visibility = View.VISIBLE
-//                }
-//                is AppState.Error -> {
-//                    binding.progressBarHistory?.visibility = View.INVISIBLE
-//                }
-//                AppState.EmptyDataSet -> {
-//                    binding.progressBarHistory?.visibility = View.INVISIBLE
-//                }
-//            }
-//        })
+        viewModel.state.observe(viewLifecycleOwner, { status ->
+            when (status) {
+                is AppState.Init, is AppState.Success -> {
+                    binding.progressBarRating?.visibility = View.INVISIBLE
+                }
+                is AppState.Loading -> {
+                    binding.progressBarRating?.visibility = View.VISIBLE
+                }
+                is AppState.Error -> {
+                    binding.progressBarRating?.visibility = View.INVISIBLE
+                }
+                AppState.EmptyDataSet -> {
+                    binding.progressBarRating?.visibility = View.INVISIBLE
+                }
+            }
+        })
     }
 
     private fun initpreferences(){

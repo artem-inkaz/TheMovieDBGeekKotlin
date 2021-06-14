@@ -1,10 +1,7 @@
 package com.example.themoviedbgeekkotlin.ratings.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.themoviedbgeekkotlin.BuildConfig
 import com.example.themoviedbgeekkotlin.api.MoviesApi
 import com.example.themoviedbgeekkotlin.api.convertMovieDtoToDomain
@@ -26,8 +23,25 @@ class RatingViewModel(
     val state: LiveData<AppState> get() = _state
 
     // 1. Создаём MutableLiveData для передачи данных в View
+    private val _popularMoviesLiveData = MutableLiveData<List<Movie>>()
     private val _searchMoviesLiveData = MutableLiveData<List<Movie>>()
     val searchMoviesLiveData: LiveData<List<Movie>> get() = _searchMoviesLiveData
+
+    val moviesMediatorData = MediatorLiveData<List<Movie>>()
+
+    init {
+
+        // 1
+        moviesMediatorData.addSource(_popularMoviesLiveData) {
+            moviesMediatorData.value = it
+        }
+
+        // 2
+        moviesMediatorData.addSource(_searchMoviesLiveData) {
+            moviesMediatorData.value = it
+        }
+
+    }
 
     // 2. Вызывается из View для передачи строки поиска в сетевой запрос
     fun onSearchQuery(query: String,lang:String, isAdult: Boolean, region: String) {
@@ -40,7 +54,7 @@ class RatingViewModel(
         }
     }
 
-    private fun fetchPopularMovies(lang:String, isAdult: Boolean) {
+    fun fetchPopularMovies(lang:String, isAdult: Boolean) {
         viewModelScope.launch {
             try {
                 _state.value = AppState.Loading
@@ -50,7 +64,9 @@ class RatingViewModel(
                 val moviesDto = apiService.getMoviesPopular(BuildConfig.THEMOVIEDB_API_KEY,1,lang, isAdult)
                 // get movie domain data
                 val movies = convertMovieDtoToDomain(moviesDto.results, genres.genres)
-                _searchMoviesLiveData.value = movies
+
+                _popularMoviesLiveData.value = movies
+
                 _state.value = AppState.SuccessMovie(movies)
             } catch (e: Exception) {
                 _state.value = AppState.Error("Ошибка загрузки данных")
