@@ -62,18 +62,18 @@ class MovieRatingAdapter(
 
         @SuppressLint("SetTextI18n")
        fun bind(movie: Movie) = with(binding) {
-            title.text = movie.title
+                title.text = movie.title
 //          poster.setImageResource(movie.poster)
-            Glide.with(itemView.context)
-                .load(movie.poster)
-                .apply(imageOption)
-                .into(poster)
-            subtitle.text = movie.genres.joinToString(", ")
-            rating.text = movie.ratings.toString()
+                Glide.with(itemView.context)
+                    .load(movie.poster)
+                    .apply(imageOption)
+                    .into(poster)
+                subtitle.text = movie.genres.joinToString(", ")
+                rating.text = movie.ratings.toString()
 
-            root.setOnClickListener {
+                root.setOnClickListener {
 //                itemViewClickListener.onItemViewClick(movie)
-            }
+                }
         }
     }
 }
