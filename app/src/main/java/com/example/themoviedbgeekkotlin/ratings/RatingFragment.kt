@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.themoviedbgeekkotlin.AppPreferences
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.RatingFragmentBinding
 import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
@@ -32,6 +33,7 @@ class RatingFragment : Fragment() {
     private var progressBar: ProgressBar? = null
 
     private lateinit var searchString: String
+
 
     private val viewModel: RatingViewModel by viewModels { RatingViewModelFactory() }
 
@@ -59,12 +61,22 @@ class RatingFragment : Fragment() {
         recycler?.layoutManager = LinearLayoutManager(activity)
         recycler?.adapter = MovieRatingAdapter(moviesclickListener)
 
-        setObservers()
+//        binding.progressBarRating?.visibility = View.INVISIBLE
 
         // 3. После того, как текст изменился - вызываем метод ViewModel
         if (searchString != "" && viewModel.searchMoviesLiveData.value.isNullOrEmpty()) {
             viewModel.onSearchQuery(searchString, "ru", true, "RU")
+            setObservers()
+            AppPreferences.setSearchQuery(searchString)
         }
+
+        setObservers()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        initpreferences()
+        viewModel.onSearchQuery(searchString, "ru", true, "RU")
     }
 
     private fun setObservers() {
@@ -76,7 +88,6 @@ class RatingFragment : Fragment() {
             }
             binding.progressBarRating?.visibility = View.INVISIBLE
         })
-
 
         // observe status
 //        viewModel.state.observe(viewLifecycleOwner, { status ->
@@ -97,6 +108,11 @@ class RatingFragment : Fragment() {
 //        })
     }
 
+    private fun initpreferences(){
+        searchString = if (AppPreferences.getSearchQuery()?.isNotEmpty() == true) {
+            AppPreferences.getSearchQuery().toString()
+        } else ""
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
