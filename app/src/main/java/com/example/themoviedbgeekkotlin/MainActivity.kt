@@ -28,14 +28,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
 
     lateinit var mToolbar: Toolbar
-
     // навигация
     lateinit var navController: NavController
     lateinit var bottom_navigation: BottomNavigationView
-
     // создание связки, при закрытии MainActivity должны обнулят нашу ссылку _binding
     private var _binding: MainActivityBinding? = null
-
     // сссылка ссылается на наш _binding данная строчка val mBinding get() = _binding!! позволит избежать проверки на null
     // _binding!! - будет 100% не null
     val mBinding get() = _binding!!

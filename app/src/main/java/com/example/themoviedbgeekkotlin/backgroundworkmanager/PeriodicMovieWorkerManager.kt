@@ -5,7 +5,7 @@ import androidx.work.*
 import java.util.concurrent.TimeUnit
 
 class PeriodicMovieWorkerManager(private val context: Context, params: WorkerParameters) :
-    Worker(context, params) {
+        Worker(context, params) {
 
     override fun doWork(): Result {
         return Result.success()
@@ -16,35 +16,35 @@ class PeriodicMovieWorkerManager(private val context: Context, params: WorkerPar
 
         // 1. Метод для создание условий
         private fun createConstraints() = Constraints.Builder()
-            // 1a. Условие подключения к Wi-Fi
-            .setRequiredNetworkType(NetworkType.UNMETERED)
-            // 1b. Подключения к зарядке
-            .setRequiresCharging(true) // на эмуляторе может не работать
-            .build()
+                // 1a. Условие подключения к Wi-Fi
+                .setRequiredNetworkType(NetworkType.UNMETERED)
+                // 1b. Подключения к зарядке
+                .setRequiresCharging(true) // на эмуляторе может не работать
+                .build()
 
         // Метод для создания PeriodicWorkRequest
         private fun createWorkRequest(data: Data): PeriodicWorkRequest {
             // Заменяем на PeriodicWorkRequest и добавляем интервал
             return PeriodicWorkRequest.Builder(
-                PeriodicMovieWorkerManager::class.java,
-                15,
-                TimeUnit.MINUTES
+                    PeriodicMovieWorkerManager::class.java,
+                    15,
+                    TimeUnit.MINUTES
             )
-                .setConstraints(createConstraints())
-                .setInputData(data)
-                .addTag(PERIODIC_WORKER_TAG)
-                .build()
+                    .setConstraints(createConstraints())
+                    .setInputData(data)
+                    .addTag(PERIODIC_WORKER_TAG)
+                    .build()
         }
 
         // Метод для запуска PeriodicWorkRequest
         fun startWork(context: Context) {
             val work = createWorkRequest(Data.EMPTY)
             WorkManager.getInstance(context)
-                .enqueueUniquePeriodicWork(
-                    PERIODIC_WORKER_TAG,
-                    ExistingPeriodicWorkPolicy.REPLACE,
-                    work
-                )
+                    .enqueueUniquePeriodicWork(
+                            PERIODIC_WORKER_TAG,
+                            ExistingPeriodicWorkPolicy.REPLACE,
+                            work
+                    )
         }
 
         // 3. Метод для остановки
