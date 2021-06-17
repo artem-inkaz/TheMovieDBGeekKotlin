@@ -34,4 +34,5 @@
     <string name="notes_title">Заметка</string>
     <string name="notes_edit">Заметка</string>
     <string name="search">Search</string>
+    <string name="map">Map</string>
 </resources>

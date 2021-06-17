@@ -46,5 +46,10 @@
         android:id="@+id/ratingFragment"
         android:name="com.example.themoviedbgeekkotlin.ratings.RatingFragment"
         android:label="RatingFragment" />
+    <fragment
+        android:id="@+id/mapsMovieFragment"
+        android:name="com.example.themoviedbgeekkotlin.map.MapsMovieFragment"
+        android:label="fragment_maps_movie"
+        tools:layout="@layout/fragment_maps_movie" />
 
 </navigation>

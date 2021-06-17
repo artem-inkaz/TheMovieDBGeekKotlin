@@ -5,9 +5,19 @@ plugins {
 //    id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
+    id 'com.google.gms.google-services'
 }
 
 android {
+    signingConfigs {
+        singingconf {
+            storeFile file('./../keymovie.jks')
+            keyAlias 'alias'
+            storePassword 'password'
+            keyPassword 'password'
+//            v2SigningEnabled false
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
@@ -17,8 +27,11 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+        buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
     }
 
     buildFeatures {
@@ -29,15 +42,18 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+           signingConfig signingConfigs.singingconf
         }
         debug {
-            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
-            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+//            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+//            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
 
             // If you decide to play with this app more than a few times,
             // please, create your own api key, so this one does not get banned:
             // https://www.themoviedb.org/documentation/api
 //            buildConfigField "String", "API_KEY", "\"3847095cad8449ec1b9ca6240fa9102c\""
+//              versionNameSuffix "-debug"
+           signingConfig signingConfigs.singingconf
         }
     }
     compileOptions {
@@ -90,6 +106,10 @@ dependencies {
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //Map
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.maps.android:maps-utils-ktx:0.2'
     //Room
     def room_version = "2.2.5"
     kapt "androidx.room:room-compiler:$room_version"
@@ -120,5 +140,8 @@ dependencies {
 
     //Paging Library
     implementation 'androidx.paging:paging-runtime-ktx:3.1.0-alpha01'
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:28.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
 }
