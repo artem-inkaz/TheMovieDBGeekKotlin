@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,11 +20,8 @@ import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.api.MovieDtoEx
 import com.example.themoviedbgeekkotlin.databinding.FragmentDetailsBinding
 import com.example.themoviedbgeekkotlin.model.Movie
-import com.example.themoviedbgeekkotlin.movielist.AppState
 import com.example.themoviedbgeekkotlin.movielist.FragmentMovieListViewModel
 import com.example.themoviedbgeekkotlin.moviesdetail.ActorAdapter
-import com.google.android.material.snackbar.Snackbar
-
 
 const val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
 const val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"
@@ -62,7 +58,6 @@ class DetailsFragment : Fragment() {
     }
     private var adapter: ActorAdapter? = null
 
-
     //Создаём свой BroadcastReceiver (получатель широковещательного сообщения)
     private val loadResultsReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -71,7 +66,7 @@ class DetailsFragment : Fragment() {
 //   во фрагменте через when мы сможем прочитать и обработать результат.
             when (intent.getStringExtra(DETAILS_LOAD_RESULT_EXTRA)) {
                 DETAILS_INTENT_EMPTY_EXTRA -> TODO(PROCESS_ERROR)
-                DETAILS_DATA_EMPTY_EXTRA ->TODO(PROCESS_ERROR)
+                DETAILS_DATA_EMPTY_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_RESPONSE_EMPTY_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_REQUEST_ERROR_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_REQUEST_ERROR_MESSAGE_EXTRA -> TODO(PROCESS_ERROR)
@@ -79,13 +74,13 @@ class DetailsFragment : Fragment() {
                 DETAILS_RESPONSE_SUCCESS_EXTRA -> renderData(
                     MovieDtoEx(
 //                        FactDTO(
-                            intent.getIntExtra(DETAILS_ID_EXTRA,632357),
-                            intent.getStringExtra(DETAILS_TITLE_EXTRA),
-                            intent.getStringExtra(DETAILS_STORY_EXTRA),
-                            intent.getStringExtra(DETAILS_BACKDROP_EXTRA),
-                            intent.getFloatExtra(DETAILS_RATINGS_EXTRA,0.0f),
-                            intent.getIntExtra(DETAILS_RUNTIME_EXTRA,0),
-                            intent.getIntExtra(DETAILS_REVIEWS_EXTRA,0),
+                        intent.getIntExtra(DETAILS_ID_EXTRA, 632357),
+                        intent.getStringExtra(DETAILS_TITLE_EXTRA),
+                        intent.getStringExtra(DETAILS_STORY_EXTRA),
+                        intent.getStringExtra(DETAILS_BACKDROP_EXTRA),
+                        intent.getFloatExtra(DETAILS_RATINGS_EXTRA, 0.0f),
+                        intent.getIntExtra(DETAILS_RUNTIME_EXTRA, 0),
+                        intent.getIntExtra(DETAILS_REVIEWS_EXTRA, 0),
 
                         )
 //                    )
@@ -123,7 +118,7 @@ class DetailsFragment : Fragment() {
 //        movieBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Movie()
 
         binding.recyclerView.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerView.adapter = adapter
 
         getMovie()
@@ -149,16 +144,16 @@ class DetailsFragment : Fragment() {
 
     private fun renderData(movieDtoEx: MovieDtoEx) {
 
-            with(binding) {
-                tvTitle.text = movieDtoEx.title
-                Glide.with(root.context)
-                        .load(BuildConfig.BASE_IMAGE_URL + movieDtoEx.backdrop)
-                        .apply(imageOption)
-                        .into(imgTitlePoster)
-                ratingBar.rating = movieDtoEx.ratings /2
-                tvReviews.text = movieDtoEx.reviews.toString() + " REVIEWS"
-                tvStorylineText.text = movieDtoEx.overview
-            }
+        with(binding) {
+            tvTitle.text = movieDtoEx.title
+            Glide.with(root.context)
+                .load(BuildConfig.BASE_IMAGE_URL + movieDtoEx.backdrop)
+                .apply(imageOption)
+                .into(imgTitlePoster)
+            ratingBar.rating = movieDtoEx.ratings / 2
+            tvReviews.text = movieDtoEx.reviews.toString() + " REVIEWS"
+            tvStorylineText.text = movieDtoEx.overview
+        }
     }
 
     // Статус загрузки
@@ -199,9 +194,9 @@ class DetailsFragment : Fragment() {
         }
 
         private val imageOption = RequestOptions()
-                .placeholder(R.drawable.ic_combined_shape)
-                .fallback(R.drawable.ic_combined_shape)
-                .centerCrop()
+            .placeholder(R.drawable.ic_combined_shape)
+            .fallback(R.drawable.ic_combined_shape)
+            .centerCrop()
     }
 }
 

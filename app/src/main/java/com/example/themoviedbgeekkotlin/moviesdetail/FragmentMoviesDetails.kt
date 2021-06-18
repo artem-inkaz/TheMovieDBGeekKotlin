@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -18,9 +20,11 @@ import com.example.themoviedbgeekkotlin.BuildConfig
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.api.MovieDto
 import com.example.themoviedbgeekkotlin.databinding.FragmentMoviesDetailsFragmentBinding
+import com.example.themoviedbgeekkotlin.model.Actor
 import com.example.themoviedbgeekkotlin.model.Movie
 import com.example.themoviedbgeekkotlin.movielist.AppState
 import com.example.themoviedbgeekkotlin.movielist.FragmentMovieListViewModel
+import com.example.themoviedbgeekkotlin.movielist.MoviesListViewModelFactory
 import com.example.themoviedbgeekkotlin.moviesdetail.internet.MoviesLoader
 import com.google.android.material.snackbar.Snackbar
 
@@ -29,28 +33,16 @@ class FragmentMoviesDetails : Fragment() {
     private var _binding: FragmentMoviesDetailsFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: FragmentMovieListViewModel by lazy {
-        ViewModelProvider(this).get(FragmentMovieListViewModel::class.java)
-    }
+    private val viewModel: FragmentMoviesDetailsViewModel by viewModels { MoviesDetailViewModelFactory() }
 
     private var adapter: ActorAdapter? = null
-    // Для загрузки из интернета
+
+    // Для загрузки из MovieList
     private lateinit var movieBundle: Movie
-    private val onLoadListener: MoviesLoader.MoviesLoaderListener =
-            object : MoviesLoader.MoviesLoaderListener {
-
-                override fun onLoaded(movieDto: MovieDto) {
-                    displayMovie(movieDto)
-                }
-
-                override fun onFailed(throwable: Throwable) {
-                    //Обработка ошибки
-                }
-            }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMoviesDetailsFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -67,59 +59,54 @@ class FragmentMoviesDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         movieBundle = arguments?.getParcelable<Movie>(BUNDLE_EXTRA)!!
+
+        adapter = ActorAdapter()
         binding.recyclerView.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerView.adapter = adapter
 
-        val loader = MoviesLoader(onLoadListener, movieBundle.id)
-        loader.loadMovie()
-
-
         binding.toolbar.setOnClickListener {
-            APP_ACTIVITY.navController.navigate(R.id.action_moviesdetailFragment_to_movielistFragment)
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).also {
+                it.navigate(R.id.action_moviesdetailFragment_to_movielistFragment)
+            }
         }
 
-//        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
-//        viewModel.getMovieFromLocalStorage()
-
+        movieBundle.let { movie ->
+            displayMovie(movie)
+        }
+        setObservers()
     }
 
-    private fun displayMovie(movieDto: MovieDto) {
+    private fun setObservers() {
+        // observe actors data
+        viewModel.actors.observe(viewLifecycleOwner, {
+            setActorsData(it)
+        })
+    }
+
+    private fun setActorsData(actors: List<Actor>) {
+
+        if (actors.isNotEmpty()) {
+            (binding.recyclerView?.adapter as ActorAdapter).setActor(actors)
+        }
+    }
+
+    private fun displayMovie(movie: Movie) {
 
         with(binding) {
-            tvTitle.text = movieDto.title
+            tvTitle.text = movie.title
             Glide.with(root.context)
-                .load(BuildConfig.BASE_IMAGE_URL + movieDto.backdrop)
+                .load(BuildConfig.BASE_IMAGE_URL + movie.backdrop)
                 .apply(imageOption)
                 .into(imgTitlePoster)
-            ratingBar.rating = movieDto.ratings /2
-            tvReviews.text = movieDto.reviews.toString() + " REVIEWS"
-            tvStorylineText.text = movieDto.overview
+            ratingBar.rating = movie.ratings / 2
+            tvReviews.text = movie.reviews.toString() + " REVIEWS"
+            tvStorylineText.text = movie.overview
+            movie.let {
+                viewModel.getActors(it.id)
+            }
         }
     }
-
-
-    // Статус загрузки
-//    private fun renderData(appState: AppState) {
-//
-//        when (appState) {
-//            is AppState.Success -> {
-//                adapter = ActorAdapter()
-//                        .apply { setActor(appState.movie) }
-//                binding.recyclerView.adapter = adapter
-//                binding.recyclerView.adapter?.notifyDataSetChanged()
-//            }
-//            is AppState.Loading -> {
-//            }
-//            is AppState.Error -> {
-//                Snackbar
-//                        .make(binding.root, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
-//                        .setAction(getString(R.string.reload)) { viewModel.getMovieFromLocalStorage() }
-//                        .show()
-//            }
-//        }
-//    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -136,8 +123,8 @@ class FragmentMoviesDetails : Fragment() {
         }
 
         private val imageOption = RequestOptions()
-                .placeholder(R.drawable.ic_combined_shape)
-                .fallback(R.drawable.ic_combined_shape)
-                .centerCrop()
+            .placeholder(R.drawable.ic_combined_shape)
+            .fallback(R.drawable.ic_combined_shape)
+            .centerCrop()
     }
 }

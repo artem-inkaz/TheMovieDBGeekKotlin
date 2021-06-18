@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.themoviedbgeekkotlin.BuildConfig
-import com.example.themoviedbgeekkotlin.api.MovieDto
 import com.example.themoviedbgeekkotlin.api.MovieDtoEx
 import com.google.gson.Gson
 import java.io.BufferedReader
@@ -32,7 +31,7 @@ class DetailsService(name: String = "DetailService") : IntentService(name) {
             onEmptyIntent()
         } else {
             val movieId = intent.getIntExtra(MOVIEID_EXTRA, 0)
-            if (movieId == 0 ) {
+            if (movieId == 0) {
                 onEmptyData()
             } else {
                 loadMovieService(movieId.toString())
@@ -56,7 +55,7 @@ class DetailsService(name: String = "DetailService") : IntentService(name) {
                 val movieDtoEx: MovieDtoEx =
                     Gson().fromJson(
                         getLines(BufferedReader(InputStreamReader(urlConnection.inputStream))),
-                            MovieDtoEx::class.java
+                        MovieDtoEx::class.java
                     )
                 onResponse(movieDtoEx)
             } catch (e: Exception) {
@@ -79,12 +78,28 @@ class DetailsService(name: String = "DetailService") : IntentService(name) {
         if (result == null) {
             onEmptyResponse()
         } else {
-            onSuccessResponse(movieDtoEx.id,movieDtoEx.title, movieDtoEx.overview,movieDtoEx.backdrop, movieDtoEx.ratings,movieDtoEx.runtime, movieDtoEx.reviews)
+            onSuccessResponse(
+                movieDtoEx.id,
+                movieDtoEx.title,
+                movieDtoEx.overview,
+                movieDtoEx.backdrop,
+                movieDtoEx.ratings,
+                movieDtoEx.runtime,
+                movieDtoEx.reviews
+            )
         }
     }
 
     // title:String, story: String, backdrop: String, rating: Float, reviews: Int
-    private fun onSuccessResponse(id: Int?, title:String?, story: String?, backdrop: String?, rating: Float?,runtime: Int?, reviews: Int?) {
+    private fun onSuccessResponse(
+        id: Int?,
+        title: String?,
+        story: String?,
+        backdrop: String?,
+        rating: Float?,
+        runtime: Int?,
+        reviews: Int?
+    ) {
         putLoadResult(DETAILS_RESPONSE_SUCCESS_EXTRA)
         broadcastIntent.putExtra(DETAILS_ID_EXTRA, id)
         broadcastIntent.putExtra(DETAILS_TITLE_EXTRA, title)
@@ -96,32 +111,38 @@ class DetailsService(name: String = "DetailService") : IntentService(name) {
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
+
     //Отправка уведомления
     private fun onMalformedURL() {
         putLoadResult(DETAILS_URL_MALFORMED_EXTRA)
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
+
     //Отправка уведомления
     private fun onErrorRequest(error: String) {
         putLoadResult(DETAILS_REQUEST_ERROR_EXTRA)
         broadcastIntent.putExtra(DETAILS_REQUEST_ERROR_MESSAGE_EXTRA, error)
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
+
     //Отправка уведомления
     private fun onEmptyResponse() {
         putLoadResult(DETAILS_RESPONSE_EMPTY_EXTRA)
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
+
     //Отправка уведомления
     private fun onEmptyIntent() {
         putLoadResult(DETAILS_INTENT_EMPTY_EXTRA)
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
+
     //Отправка уведомления
     private fun onEmptyData() {
         putLoadResult(DETAILS_DATA_EMPTY_EXTRA)
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
+
     //Отправка уведомления
     private fun putLoadResult(result: String) {
         broadcastIntent.putExtra(DETAILS_LOAD_RESULT_EXTRA, result)

@@ -21,5 +21,4 @@ data class Movie(
 ) : Parcelable
 
 //fun getDefaultActor()= Actor("Robert", "Downey Jr.", R.drawable.movie_downey)
-//
 //fun getDefaultGenre() = Genre(0, "Боевик")

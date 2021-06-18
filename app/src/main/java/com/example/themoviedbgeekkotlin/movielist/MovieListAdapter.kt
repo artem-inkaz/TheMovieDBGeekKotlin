@@ -15,7 +15,8 @@ import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
 import com.example.themoviedbgeekkotlin.model.Movie
 
 // Для вывода просто списком
-class MovieListAdapter(private  val itemViewClickListener: OnItemViewClickListener) : RecyclerView.Adapter<MovieListAdapter.MovieListViewHolder>() {
+class MovieListAdapter(private val itemViewClickListener: OnItemViewClickListener) :
+    RecyclerView.Adapter<MovieListAdapter.MovieListViewHolder>() {
     private var movieData: List<Movie> = listOf()
     private lateinit var binding: ViewHolderMovieBinding
 
@@ -26,8 +27,8 @@ class MovieListAdapter(private  val itemViewClickListener: OnItemViewClickListen
     }
 
     override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
+        parent: ViewGroup,
+        viewType: Int
     ): MovieListViewHolder {
         binding = ViewHolderMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MovieListViewHolder(binding.root)
@@ -43,11 +44,11 @@ class MovieListAdapter(private  val itemViewClickListener: OnItemViewClickListen
 
     inner class MovieListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-//        companion object {
-            private val imageOption = RequestOptions()
-                .placeholder(R.drawable.ic_combined_shape)
-                .fallback(R.drawable.ic_combined_shape)
-                .centerCrop()
+        //        companion object {
+        private val imageOption = RequestOptions()
+            .placeholder(R.drawable.ic_combined_shape)
+            .fallback(R.drawable.ic_combined_shape)
+            .centerCrop()
 //        }
 
         @SuppressLint("SetTextI18n")
