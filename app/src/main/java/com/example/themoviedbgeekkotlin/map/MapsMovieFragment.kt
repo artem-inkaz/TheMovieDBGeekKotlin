@@ -1,6 +1,11 @@
 package com.example.themoviedbgeekkotlin.map
 
 import android.Manifest
+import android.annotation.TargetApi
+import android.app.Activity
+import android.app.PendingIntent
+import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.fragment.app.Fragment
@@ -15,15 +20,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import com.example.themoviedbgeekkotlin.*
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.FragmentMapsMovieBinding
 import com.example.themoviedbgeekkotlin.map.api.PlaceInterface
+import com.example.themoviedbgeekkotlin.map.geofence.GeofenceBroadcastReceiver
+import com.example.themoviedbgeekkotlin.map.geofence.LandmarkDataObject
+import com.example.themoviedbgeekkotlin.map.geofence.createChannel
 import com.example.themoviedbgeekkotlin.map.repository.MapPlaceRepository
 import com.example.themoviedbgeekkotlin.map.responce.NearbyPlacesResponse
 import com.example.themoviedbgeekkotlin.map.responce.Place
-import com.example.themoviedbgeekkotlin.movielist.AppState
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -51,12 +60,30 @@ class MapsMovieFragment : Fragment() {
 
     lateinit var url: String
     private var markers: MutableList<Marker> = emptyList<Marker>().toMutableList()
+
     // Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var repositoryLocation: MapPlaceRepository
 
+    //Geofence
+    private lateinit var geofencingClient: GeofencingClient
+
+
+    private val runningQOrLater =
+            android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R
+
     private val viewModel: MapMovieViewModel by viewModels { MapMovieViewModelFactory() }
+
+    // TODO #1 GeoFence
+    //  A PendingIntent for the Broadcast Receiver that handles geofence transitions.
+    private val geofencePendingIntent: PendingIntent by lazy {
+        val intent = Intent(requireContext(), GeofenceBroadcastReceiver::class.java)
+        intent.action = ACTION_GEOFENCE_EVENT
+        // Use FLAG_UPDATE_CURRENT so that you get the same pending intent back when calling
+        // addGeofences() and removeGeofences().
+        PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -102,20 +129,30 @@ class MapsMovieFragment : Fragment() {
         mapFragment = (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?)!!
         mapFragment.getMapAsync(callback)
         placesService = PlaceInterface.create()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.context)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+        // TODO #2 GeoFence
+        geofencingClient = LocationServices.getGeofencingClient(requireContext())
 
         // запрос разрешения
         checkPermission(
                 locationPermissionRequest,
                 Manifest.permission.ACCESS_FINE_LOCATION
         ) {
-
-            setUpMaps()
-
             // проверяем разрешение на доступ к локации, ели есть разрешение то отображаем маркеры
+            setUpMaps()
+            // получаем адрес текущей локации
             viewModel.getLocation()
             setObservers()
         }
+
+        // Create channel for notifications
+        createChannel(requireContext())
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkPermissionsAndStartGeofencing()
     }
 
     private fun checkPermission(
@@ -150,14 +187,14 @@ class MapsMovieFragment : Fragment() {
 
     }
 
-
+    // работает только ф-я определения локации, формирования списка мест не работает с Map AsyncTask
     private fun setObservers() {
         // выводим текущий адрес местоположения устройства
         viewModel.location.observe(viewLifecycleOwner, {
             val location = it ?: return@observe
             Snackbar.make(
                     binding.root,
-                    "${location}",
+                    location,
                     Snackbar.LENGTH_SHORT
             ).show()
         })
@@ -191,27 +228,14 @@ class MapsMovieFragment : Fragment() {
 //            }
 //       })
 
-        // observe status
-        viewModel.state.observe(viewLifecycleOwner, { status ->
-            when (status) {
-                is AppState.Init, is AppState.Success -> {
-//                    binding.progressBar?.visibility = View.INVISIBLE
-                }
-                is AppState.Loading -> {
-//                    binding.progressBar?.visibility = View.VISIBLE
-                }
-                is AppState.Error -> {
-//                    binding.progressBar?.visibility = View.INVISIBLE
-                }
-            }
-        })
     }
 
     private fun setUpMaps() {
         mapFragment.getMapAsync { googleMap ->
             if (context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) } !=
                     PackageManager.PERMISSION_GRANTED && context?.let {
-                        ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) } != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    } != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -225,8 +249,9 @@ class MapsMovieFragment : Fragment() {
             getCurrentLocation {
                 val pos = CameraPosition.fromLatLngZoom(it.latLng, 50f)
                 googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos))
-                Toast.makeText(context,"${it.latitude},${it.longitude}",Toast.LENGTH_LONG).show()
-                url= getUrl(it.latitude, it.longitude, "movie_theater")
+                Toast.makeText(context, "${it.latitude},${it.longitude}", Toast.LENGTH_LONG).show()
+                url = getUrl(it.latitude, it.longitude, "restaurant")
+                // прорисовка маркеров
                 getNearbyPlaces(url)
             }
             googleMap.setOnMarkerClickListener { marker ->
@@ -241,34 +266,37 @@ class MapsMovieFragment : Fragment() {
         }
     }
 
+    // запрос на  сервер получение списка
     private fun getNearbyPlaces(url: String) {
         placesService.getNearByPlacesCall(url)
-            .enqueue(
-            object : Callback<NearbyPlacesResponse> {
-                override fun onFailure(call: Call<NearbyPlacesResponse>, t: Throwable) {
-                    Log.e(TAG, "Failed to get nearby places", t)
-                }
+                .enqueue(
+                        object : Callback<NearbyPlacesResponse> {
+                            override fun onFailure(call: Call<NearbyPlacesResponse>, t: Throwable) {
+                                Log.e(TAG, "Failed to get nearby places", t)
+                            }
 
-                override fun onResponse(
-                    call: Call<NearbyPlacesResponse>,
-                    response: Response<NearbyPlacesResponse>
-                ) {
-                    if (!response.isSuccessful) {
-                        Log.e(TAG, "Failed to get nearby places")
-                        return
-                    }
+                            override fun onResponse(
+                                    call: Call<NearbyPlacesResponse>,
+                                    response: Response<NearbyPlacesResponse>
+                            ) {
+                                if (!response.isSuccessful) {
+                                    Log.e(TAG, "Failed to get nearby places")
+                                    return
+                                }
 
-                    val place = response.body()?.results ?: emptyList()
-                    places = place
-                    setPlaceMarker(places!!)
-                }
-            }
-        )
+                                val place = response.body()?.results ?: emptyList()
+                                places = place
+                                setPlaceMarker(places!!)
+                            }
+                        }
+                )
     }
 
+    // прорисовка на карте маркеров
     private fun setPlaceMarker(placeId: List<Place>) {
-
-        for (place in placeId!!){
+        var i = 0
+        for (place in placeId) {
+            i++
             val markerOptions = MarkerOptions()
             val googlePlace: Place = place
             val lat = googlePlace.geometry.location.lat
@@ -276,11 +304,15 @@ class MapsMovieFragment : Fragment() {
             val placeName = googlePlace.name
 
             val latLng = LatLng(lat, lng)
+            LANDMARK_DATA.add(LandmarkDataObject(placeName, placeName, placeName, latLng))
+            addGeofenceForClue(placeName, latLng)
+//            addGeofenceForClue()
+
             markerOptions
-                .position(latLng)
-                .title(placeName)
-            markerOptions.icon( BitmapDescriptorFactory.defaultMarker(
-                BitmapDescriptorFactory.HUE_RED
+                    .position(latLng)
+                    .title(placeName)
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(
+                    BitmapDescriptorFactory.HUE_RED
             )
             )
             mMarker = map?.addMarker(markerOptions)!!
@@ -295,7 +327,8 @@ class MapsMovieFragment : Fragment() {
     private fun getCurrentLocation(onSuccess: (Location) -> Unit) {
         if (context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) } !=
                 PackageManager.PERMISSION_GRANTED && context?.let {
-                    ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION) } !=
+                    ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_COARSE_LOCATION)
+                } !=
                 PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -315,15 +348,6 @@ class MapsMovieFragment : Fragment() {
     }
 
     private fun showInfoWindow(place: Place) {
-        // Show in AR
-//        val matchingPlaceNode = anchorNode?.children?.filter {
-//            it is PlaceNode
-//        }?.first {
-//            val otherPlace = (it as PlaceNode).place ?: return@first false
-//            return@first otherPlace == place
-//        } as? PlaceNode
-//        matchingPlaceNode?.showInfoWindow()
-
         // Show as marker
         val matchingMarker = markers.firstOrNull {
             val placeTag = (it.tag as? Place) ?: return@firstOrNull false
@@ -331,17 +355,242 @@ class MapsMovieFragment : Fragment() {
         }
         matchingMarker?.showInfoWindow()
     }
+
+    // формирование строки запроса т.к. в строка запроса меняется на стороне Google проще ее сделать вручную
 //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&rankby=distance&type=restaurant&key=YOUR_API_KEY
-    private fun getUrl(latitude: Double, longitude: Double, placeType: String):String {
+    private fun getUrl(latitude: Double, longitude: Double, placeType: String): String {
         val googlePlaceUrl = StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?")
         googlePlaceUrl.append("location=$latitude,$longitude")
         googlePlaceUrl.append("&rankby=distance")
         googlePlaceUrl.append("&type=$placeType")
-        googlePlaceUrl.append("&key="+resources.getString(R.string.browser_key))
-        Log.d("getUrl",googlePlaceUrl.toString())
+        googlePlaceUrl.append("&key=" + resources.getString(R.string.browser_key))
+        Log.d("getUrl", googlePlaceUrl.toString())
         return googlePlaceUrl.toString()
+    }
+
+    /*
+    *код для проверки того, что у пользователя включено определение местоположения устройства,
+    * и если нет, отобразите действие, в котором они могут его включить.
+    */
+    // TODO #0 GeoFence Permissions
+    private fun checkDeviceLocationSettingsAndStartGeofence(resolve: Boolean = true) {
+
+        val locationRequest = LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_LOW_POWER
+        }
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+
+        val settingsClient = LocationServices.getSettingsClient(context)
+        val locationSettingsResponseTask =
+                settingsClient.checkLocationSettings(builder.build())
+
+        locationSettingsResponseTask.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException && resolve) {
+                // Location settings are not satisfied, but this can be fixed
+                // by showing the user a dialog.
+                try {
+                    // Show the dialog by calling startResolutionForResult(),
+                    // and check the result in onActivityResult().
+                    exception.startResolutionForResult(context as Activity,
+                            REQUEST_TURN_DEVICE_LOCATION_ON)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.d(TAG, "Error geting location settings resolution: " + sendEx.message)
+                }
+            } else {
+                Snackbar.make(
+                        binding.map,
+                        R.string.location_required_error, Snackbar.LENGTH_INDEFINITE
+                ).setAction(android.R.string.ok) {
+                    checkDeviceLocationSettingsAndStartGeofence()
+                }.show()
+            }
+        }
+        locationSettingsResponseTask.addOnCompleteListener {
+            if (it.isSuccessful) {
+//              addGeofenceForClue()
+            }
+        }
+    }
+
+    /**
+     * Starts the permission check and Geofence process only if the Geofence associated with the
+     * current hint isn't yet active.
+     */
+    private fun checkPermissionsAndStartGeofencing() {
+        if (foregroundAndBackgroundLocationPermissionApproved()) {
+            checkDeviceLocationSettingsAndStartGeofence()
+        } else {
+            requestForegroundAndBackgroundLocationPermissions()
+        }
+    }
+
+    private fun foregroundAndBackgroundLocationPermissionApproved(): Boolean {
+        val foregroundLocationApproved = (
+                PackageManager.PERMISSION_GRANTED ==
+                        context?.let {
+                            ActivityCompat.checkSelfPermission(it,
+                                    Manifest.permission.ACCESS_FINE_LOCATION)
+                        })
+        val backgroundPermissionApproved =
+                if (runningQOrLater) {
+                    PackageManager.PERMISSION_GRANTED ==
+                            context?.let {
+                                ActivityCompat.checkSelfPermission(
+                                        it, Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                                )
+                            }
+                } else {
+                    true
+                }
+        return foregroundLocationApproved && backgroundPermissionApproved
+    }
+
+    /*
+ *  Requests ACCESS_FINE_LOCATION and (on Android 10+ (Q) ACCESS_BACKGROUND_LOCATION.
+ */
+    private fun requestForegroundAndBackgroundLocationPermissions() {
+        if (foregroundAndBackgroundLocationPermissionApproved())
+            return
+
+        // Else request the permission
+        // this provides the result[LOCATION_PERMISSION_INDEX]
+        var permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+
+        val resultCode = when {
+            runningQOrLater -> {
+                // this provides the result[BACKGROUND_LOCATION_PERMISSION_INDEX]
+                permissionsArray += Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
+            }
+            else -> REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
+        }
+
+        Log.d(TAG, "Request foreground only location permission")
+        ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissionsArray,
+                resultCode
+        )
+    }
+
+    /*
+ * Adds a Geofence for the current clue if needed, and removes any existing Geofence. This
+ * method should be called after the user has granted the location permission.  If there are
+ * no more geofences, we remove the geofence and let the viewmodel know that the ending hint
+ * is now "active."
+ */
+    // TODO #3 GeoFence Create
+
+    private fun addGeofenceForClue(name: String, latLong: LatLng) {
+
+//        val currentGeofenceData = LANDMARK_DATA[0]
+
+        // TODO #3.1 Build the Geofence Object Создание геозоны
+        val geofence = Geofence.Builder()
+                // Задайте идентификатор запроса, строку для идентификации геозоны.
+                // TODO
+                .setRequestId(name)
+                // Задайте круговую область этой геозоны.
+                .setCircularRegion(latLong.latitude,
+                        latLong.longitude,
+                        GEOFENCE_RADIUS_IN_METERS
+                )
+
+                .setExpirationDuration(GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                // Устанавливаем интересующие типы переходов.
+                // Предупреждения генерируются только для этого перехода.
+                // В этом примере мы отслеживаем переходы входа и выхода.
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .build()
+
+
+        //Создайте запрос геозоны. Установите начальный триггер на INITIAL_TRIGGER_ENTER,
+        // добавьте геозону, которую вы только что построили, а затем постройте.
+        // Build the geofence request
+        val geofencingRequest = GeofencingRequest.Builder()
+                // Флаг INITIAL_TRIGGER_ENTER указывает,
+                // что сервис геозоны должен запускать уведомление GEOFENCE_TRANSITION_ENTER,
+                // когда геозона добавляется и если устройство уже находится внутри этой геозоны.
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                // Добавьте геозоны, которые будут отслеживаться сервисом геозон.
+                .addGeofence(geofence)
+                .build()
+
+        // Сначала удалите все существующие геозоны, которые используют наше ожидающее намерение.
+//        geofencingClient.removeGeofences(geofencePendingIntent).run {
+//            // Regardless of success/failure of the removal, add the new geofence
+//            addOnCompleteListener {
+        // Add the new geofence request with the new geofence
+        if (requireContext().let { it1 -> ActivityCompat.checkSelfPermission(it1, Manifest.permission.ACCESS_FINE_LOCATION) }
+                != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
+            addOnSuccessListener {
+                // Geofences added.
+                Toast.makeText(requireContext(), R.string.geofences_added,
+                        Toast.LENGTH_SHORT)
+                        .show()
+                Log.e("Add Geofence", geofence.requestId)
+                // Tell the viewmodel that we've reached the end of the game and
+                // activated the last "geofence" --- by removing the Geofence.
+                //                        viewModel.geofenceActivated()
+            }
+            addOnFailureListener {
+                // Failed to add geofences.
+                Toast.makeText(requireContext(), R.string.geofences_not_added,
+                        Toast.LENGTH_SHORT).show()
+                if ((it.message != null)) {
+                    Log.w(TAG, it.message!!)
+                }
+            }
+        }
+
+
+//            }
+//        }
+    }
+
+    /**
+     * Removes geofences. This method should be called after the user has granted the location
+     * permission.
+     */
+    private fun removeGeofences() {
+        if (!foregroundAndBackgroundLocationPermissionApproved()) {
+            return
+        }
+        geofencingClient.removeGeofences(geofencePendingIntent).run {
+            addOnSuccessListener {
+                // Geofences removed
+                Log.d(TAG, getString(R.string.geofences_removed))
+                Toast.makeText(requireContext(), R.string.geofences_removed, Toast.LENGTH_SHORT)
+                        .show()
+            }
+            addOnFailureListener {
+                // Failed to remove geofences
+                Log.d(TAG, getString(R.string.geofences_not_removed))
+            }
+        }
+    }
+
+    companion object {
+        internal const val ACTION_GEOFENCE_EVENT =
+                "MapMovieFragment.themoviedbgeekkotlin.action.ACTION_GEOFENCE_EVENT"
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        removeGeofences()
     }
 }
 
 val Location.latLng: LatLng
     get() = LatLng(this.latitude, this.longitude)
+

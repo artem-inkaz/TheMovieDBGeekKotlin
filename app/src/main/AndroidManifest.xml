@@ -40,7 +40,7 @@
         </activity>
 
         <service android:name=".moviesdetail.service.DetailsService" />
-
+        <receiver android:name=".map.geofence.GeofenceBroadcastReceiver"/>
         <receiver android:name=".notification.MoviesAlarmReceiver" />
     </application>
 
