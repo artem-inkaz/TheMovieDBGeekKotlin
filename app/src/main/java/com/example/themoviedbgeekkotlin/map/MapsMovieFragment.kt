@@ -250,7 +250,7 @@ class MapsMovieFragment : Fragment() {
                 val pos = CameraPosition.fromLatLngZoom(it.latLng, 50f)
                 googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos))
                 Toast.makeText(context, "${it.latitude},${it.longitude}", Toast.LENGTH_LONG).show()
-                url = getUrl(it.latitude, it.longitude, "restaurant")
+                url = getUrl(it.latitude, it.longitude, "movie_theater")
                 // прорисовка маркеров
                 getNearbyPlaces(url)
             }
@@ -380,7 +380,7 @@ class MapsMovieFragment : Fragment() {
         }
         val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
 
-        val settingsClient = LocationServices.getSettingsClient(context)
+        val settingsClient = LocationServices.getSettingsClient(requireContext())
         val locationSettingsResponseTask =
                 settingsClient.checkLocationSettings(builder.build())
 
@@ -391,7 +391,7 @@ class MapsMovieFragment : Fragment() {
                 try {
                     // Show the dialog by calling startResolutionForResult(),
                     // and check the result in onActivityResult().
-                    exception.startResolutionForResult(context as Activity,
+                    exception.startResolutionForResult(requireContext() as Activity,
                             REQUEST_TURN_DEVICE_LOCATION_ON)
                 } catch (sendEx: IntentSender.SendIntentException) {
                     Log.d(TAG, "Error geting location settings resolution: " + sendEx.message)
@@ -516,10 +516,6 @@ class MapsMovieFragment : Fragment() {
                 .addGeofence(geofence)
                 .build()
 
-        // Сначала удалите все существующие геозоны, которые используют наше ожидающее намерение.
-//        geofencingClient.removeGeofences(geofencePendingIntent).run {
-//            // Regardless of success/failure of the removal, add the new geofence
-//            addOnCompleteListener {
         // Add the new geofence request with the new geofence
         if (requireContext().let { it1 -> ActivityCompat.checkSelfPermission(it1, Manifest.permission.ACCESS_FINE_LOCATION) }
                 != PackageManager.PERMISSION_GRANTED) {
@@ -539,9 +535,6 @@ class MapsMovieFragment : Fragment() {
                         Toast.LENGTH_SHORT)
                         .show()
                 Log.e("Add Geofence", geofence.requestId)
-                // Tell the viewmodel that we've reached the end of the game and
-                // activated the last "geofence" --- by removing the Geofence.
-                //                        viewModel.geofenceActivated()
             }
             addOnFailureListener {
                 // Failed to add geofences.
@@ -552,10 +545,6 @@ class MapsMovieFragment : Fragment() {
                 }
             }
         }
-
-
-//            }
-//        }
     }
 
     /**
