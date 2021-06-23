@@ -25,12 +25,6 @@ class App : Application() {
         )
         //Теперь мы сможем отправить уведомление.
 
-        // Регистрация канала push уведомления
-//        MoviesNotificationHelper.createNotificationChannelForFCM(
-//            this,
-//            NotificationManagerCompat.IMPORTANCE_HIGH, false,
-//            CHANNEL_ID, "Канал THEMOVIEDB - Любимые фильмы всегда под рукой"
-//        )
     }
 
     companion object {

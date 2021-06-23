@@ -56,12 +56,6 @@ class MainActivity : AppCompatActivity() {
         AppPreferences.getPreference(this)
 
         RepositoryFCM.getToken()
-
-//        lifecycleScope.launchWhenCreated {
-//            val token = RepositoryFCM.getToken()
-//            token.toString()
-//            Log.d("TOKEN", "Refreshed token: $token")
-//        }
     }
 
     private fun initBottomNavigation() {

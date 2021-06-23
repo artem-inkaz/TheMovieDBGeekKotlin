@@ -8,7 +8,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import kotlin.coroutines.suspendCoroutine
 
 object RepositoryFCM {
-
+        // Функция получение токена
     fun getToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
