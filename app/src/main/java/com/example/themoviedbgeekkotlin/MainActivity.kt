@@ -1,9 +1,7 @@
 package com.example.themoviedbgeekkotlin
 
-import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
-import android.content.res.Resources
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,15 +12,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.graphics.toColor
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.themoviedbgeekkotlin.backgroundworkmanager.SimpleMovieWorkerManager
 import com.example.themoviedbgeekkotlin.databinding.MainActivityBinding
-import com.example.themoviedbgeekkotlin.favourite.FragmentFavourite
-import com.example.themoviedbgeekkotlin.movielist.FragmentMovieList
+import com.example.themoviedbgeekkotlin.push.RepositoryFCM
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -59,6 +54,14 @@ class MainActivity : AppCompatActivity() {
 
         // как только запустилинаше приложение проинициализируем наши настройки
         AppPreferences.getPreference(this)
+
+        RepositoryFCM.getToken()
+
+//        lifecycleScope.launchWhenCreated {
+//            val token = RepositoryFCM.getToken()
+//            token.toString()
+//            Log.d("TOKEN", "Refreshed token: $token")
+//        }
     }
 
     private fun initBottomNavigation() {

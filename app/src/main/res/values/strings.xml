@@ -54,4 +54,9 @@
     <string name="content_text">You found a movie theater <xliff:g id="geofence_location">%1$s</xliff:g>.</string>
     <string name="geofences_removed">Geofences removed.</string>
     <string name="geofences_not_removed">Geofences not removed.</string>
+    <string name="now_playing_movie_reminder">Обновился список фильмов Now Playing</string>
+    <string name="message_subscribed">Подписаны на тему</string>
+    <string name="message_subscribe_failed">Ошибка подписки на тему</string>
+    <string name="channel_now_playing">Now Playing</string>
+
 </resources>

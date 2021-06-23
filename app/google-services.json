@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "865332395025",
+    "project_id": "geekmovie-e5872",
+    "storage_bucket": "geekmovie-e5872.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865332395025:android:1f6336643e2432dd9785b0",
+        "android_client_info": {
+          "package_name": "com.example.themoviedbgeekkotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "865332395025-9sgi6llr9sp7l0cvkbasajoirftb5n4f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDSmBG8GSf4QRmPWiuCj2MpFgVMxoQuPw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "865332395025-9sgi6llr9sp7l0cvkbasajoirftb5n4f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

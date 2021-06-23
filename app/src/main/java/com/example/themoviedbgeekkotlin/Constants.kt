@@ -15,6 +15,8 @@ const val LOCATION_PERMISSION_INDEX = 0
 const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
 const val GEOFENCE_RADIUS_IN_METERS = 100f
 const val EXTRA_GEOFENCE_INDEX = "GEOFENCE_INDEX"
+const val CHANNEL_ID = "NOW_PLAYING"
+const val TOPIC_ID = "PLAYING"
 //var LANDMARK_DATA = arrayListOf<LandmarkDataObject>()
 var LANDMARK_DATA : MutableList<LandmarkDataObject> = ArrayList()
 /**

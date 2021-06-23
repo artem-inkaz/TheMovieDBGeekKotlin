@@ -68,7 +68,8 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
 
         SearchBySetting()
         // отображаем нотификацию
-        showNotification()
+//        showNotification()
+//        showNotificationFCM()
         stateParams()
         setObservers()
     }
@@ -173,6 +174,12 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
         MoviesNotificationHelper.createMoviesNotification(
                 requireContext(), "Супер Уведомление", "Это уведомление для отладки", "", true
         )
+    }
+
+    private fun showNotificationFCM() {
+        // запустим уведомление
+        //Теперь, по нажатию на кнопку, помимо перехода на следующий фрагмент у нас появится уведомление
+//        MoviesNotificationHelper.subscribeTopic(requireContext())
     }
 
     override fun onItemViewClick(movie: Movie) {
