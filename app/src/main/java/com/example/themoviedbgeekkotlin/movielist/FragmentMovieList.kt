@@ -69,6 +69,7 @@ class FragmentMovieList : Fragment(), OnItemViewClickListener {
         SearchBySetting()
         // отображаем нотификацию
 //        showNotification()
+        // отображаем push нотификацию
 //        showNotificationFCM()
         stateParams()
         setObservers()
