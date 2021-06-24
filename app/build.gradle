@@ -9,7 +9,6 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
-
 android {
     signingConfigs {
         singingconf {
@@ -34,6 +33,7 @@ android {
 
         buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
         buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+
     }
 
     buildFeatures {
@@ -44,18 +44,49 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-           signingConfig signingConfigs.singingconf
+            signingConfig signingConfigs.singingconf
+            // URL  для каждой версии могут быть свои
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+            buildConfigField "String", "TYPE", '"RELEASE"'
         }
         debug {
-//            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
-//            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
-
-            // If you decide to play with this app more than a few times,
-            // please, create your own api key, so this one does not get banned:
-            // https://www.themoviedb.org/documentation/api
-//            buildConfigField "String", "API_KEY", "\"3847095cad8449ec1b9ca6240fa9102c\""
-//              versionNameSuffix "-debug"
            signingConfig signingConfigs.singingconf
+            // URL  для каждой версии могут быть свои
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+            buildConfigField "String", "TYPE", '"DEBUG"'
+            versionNameSuffix ".debug"
+
+        }
+
+        demo  {
+            signingConfig signingConfigs.singingconf
+            // demo тоже самое что и debug  т.е. основывается на  debug
+            initWith debug
+            // URL  для каждой версии могут быть свои
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+            buildConfigField "String", "TYPE", '"DEMO"'
+            versionNameSuffix ".demo"
+            multiDexEnabled true
+
+            // Можно поменять packagename предварительно сделав изменения в Firebase т.к. там прописан
+            // общий package name package="com.example.themoviedbgeekkotlin"
+            //applicationIdSuffix ".demo"
+
+        }
+
+        beta  {
+            // demo тоже самое что и debug  т.е. основывается на  debug
+            initWith debug
+            signingConfig signingConfigs.singingconf
+            // URL  для каждой версии могут быть свои
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+            buildConfigField "String", "TYPE", '"BETA"'
+            versionNameSuffix ".beta"
+            multiDexEnabled true
         }
     }
     compileOptions {
