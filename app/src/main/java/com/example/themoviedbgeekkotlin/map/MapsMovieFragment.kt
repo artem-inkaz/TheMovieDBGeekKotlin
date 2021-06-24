@@ -30,7 +30,6 @@ import com.example.themoviedbgeekkotlin.map.geofence.createChannel
 import com.example.themoviedbgeekkotlin.map.repository.MapPlaceRepository
 import com.example.themoviedbgeekkotlin.map.responce.NearbyPlacesResponse
 import com.example.themoviedbgeekkotlin.map.responce.Place
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -137,7 +136,8 @@ class MapsMovieFragment : Fragment() {
         checkPermission(
                 locationPermissionRequest,
                 Manifest.permission.ACCESS_FINE_LOCATION
-        ) {
+        )
+        {
             // проверяем разрешение на доступ к локации, ели есть разрешение то отображаем маркеры
             setUpMaps()
             // получаем адрес текущей локации

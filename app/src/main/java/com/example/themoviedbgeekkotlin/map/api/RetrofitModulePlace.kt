@@ -1,20 +1,24 @@
 package com.example.themoviedbgeekkotlin.map.api
 
+import com.example.themoviedbgeekkotlin.api.LogginInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitModulePlace {
 
     private const val ROOT_URL = "https://maps.googleapis.com/maps/api/place/"
+    private val  logginInterceptor: LogginInterceptor? = null
 
-    private val client = OkHttpClient().newBuilder()
-            .addInterceptor(PlacesApiHeaderInterceptor())
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+    private val client =  OkHttpClient.Builder().apply {
+//        OkHttpClient().newBuilder()
+            addInterceptor(PlacesApiHeaderInterceptor())
+           logginInterceptor?.providesHttpLoggingInterceptor()
+    }
             .build()
+
 
     val retrofit: Retrofit = Retrofit.Builder()
             .client(client)

@@ -1,9 +1,14 @@
 package com.example.themoviedbgeekkotlin.map.api
 
+//import com.example.themoviedbgeekkotlin.api.LogginInterceptor
+import com.example.themoviedbgeekkotlin.api.LogginInterceptor
+//import com.example.themoviedbgeekkotlin.api.LoginInterceptor
+//import com.example.themoviedbgeekkotlin.domain.LoginInterceptor
 import com.example.themoviedbgeekkotlin.map.responce.NearbyPlacesResponse
 import com.google.android.gms.maps.model.LatLng
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+//import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -35,11 +40,17 @@ interface PlaceInterface {
         private const val ROOT_URL = "https://maps.googleapis.com/maps/api/place/"
 
         fun create(): PlaceInterface {
-            val logger = HttpLoggingInterceptor()
-            logger.level = HttpLoggingInterceptor.Level.BODY
-            val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(logger)
-                .build()
+            val  logginInterceptor: LogginInterceptor? = null
+
+//            val logger = HttpLoggingInterceptor()
+//            logger.level = HttpLoggingInterceptor.Level.BODY
+//            val logger = loginInterceptor?.providesHttpLoggingInterceptor()
+            val okHttpClient = OkHttpClient.Builder().apply {
+                logginInterceptor?.providesHttpLoggingInterceptor()
+            }
+                    .build()
+
+
 
             val converterFactory = GsonConverterFactory.create()
             val retrofit = Retrofit.Builder()

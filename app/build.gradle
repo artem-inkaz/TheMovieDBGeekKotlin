@@ -10,6 +10,9 @@ plugins {
 }
 
 android {
+//    lintOptions {
+//        abortOnError false
+//    }
     signingConfigs {
         singingconf {
             storeFile file('./../keymovie.jks')
@@ -49,6 +52,8 @@ android {
             buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
             buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
             buildConfigField "String", "TYPE", '"RELEASE"'
+            debuggable true
+
         }
         debug {
            signingConfig signingConfigs.singingconf
@@ -56,7 +61,7 @@ android {
             buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
             buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
             buildConfigField "String", "TYPE", '"DEBUG"'
-            versionNameSuffix ".debug"
+//            versionNameSuffix ".debug"
 
         }
 
@@ -96,6 +101,15 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    flavorDimensions 'version'
+    productFlavors {
+        free {
+            dimension 'version'
+        }
+        paid {
+            dimension 'version'
+        }
+    }
 
     buildTypes.each {
         Properties properties = new Properties()
@@ -132,7 +146,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    // позволяет указывать в какой сборке будут какие зависимости просто implementation значит доступно везде
+    debugImplementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+//    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0'
     //Coil for Image download
     implementation 'io.coil-kt:coil:1.1.0'
@@ -184,4 +200,9 @@ dependencies {
 //    implementation 'android.arch.work:work-runtime:1.0.1'
 //    implementation 'com.google.firebase:firebase-core:18.0.0'
 //    implementation 'com.google.firebase:firebase-iid:21.1.0'
+
+    // Kotlin
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
+    // Testing Fragments in Isolation
+    debugImplementation("androidx.fragment:fragment-testing:$fragment_version")
 }
