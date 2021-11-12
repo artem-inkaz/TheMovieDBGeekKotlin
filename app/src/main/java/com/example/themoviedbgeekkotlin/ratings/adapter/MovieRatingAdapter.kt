@@ -15,9 +15,9 @@ import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
 
 // Для вывода просто списком
 class MovieRatingAdapter(
-    private val itemViewClickListener: OnItemViewClickListener
+        private val itemViewClickListener: OnItemViewClickListener
 ) :
-    RecyclerView.Adapter<MovieRatingAdapter.MovieListViewHolder>() {
+        RecyclerView.Adapter<MovieRatingAdapter.MovieListViewHolder>() {
 
     private var movieData: List<Movie> = listOf()
 
@@ -31,11 +31,11 @@ class MovieRatingAdapter(
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+            parent: ViewGroup,
+            viewType: Int
     ): MovieListViewHolder {
         binding =
-            ListItemHistoryMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ListItemHistoryMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MovieListViewHolder(binding.root)
     }
 
@@ -55,25 +55,25 @@ class MovieRatingAdapter(
 
         //        companion object {
         private val imageOption = RequestOptions()
-            .placeholder(R.drawable.ic_combined_shape)
-            .fallback(R.drawable.ic_combined_shape)
-            .centerCrop()
+                .placeholder(R.drawable.ic_combined_shape)
+                .fallback(R.drawable.ic_combined_shape)
+                .centerCrop()
 //        }
 
         @SuppressLint("SetTextI18n")
-       fun bind(movie: Movie) = with(binding) {
-                title.text = movie.title
+        fun bind(movie: Movie) = with(binding) {
+            title.text = movie.title
 //          poster.setImageResource(movie.poster)
-                Glide.with(itemView.context)
+            Glide.with(itemView.context)
                     .load(movie.poster)
                     .apply(imageOption)
                     .into(poster)
-                subtitle.text = movie.genres.joinToString(", ")
-                rating.text = movie.ratings.toString()
+            subtitle.text = movie.genres.joinToString(", ")
+            rating.text = movie.ratings.toString()
 
-                root.setOnClickListener {
+            root.setOnClickListener {
 //                itemViewClickListener.onItemViewClick(movie)
-                }
+            }
         }
     }
 }

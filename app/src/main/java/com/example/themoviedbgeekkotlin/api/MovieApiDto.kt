@@ -63,4 +63,3 @@ data class ActorDto(
     @SerializedName("profile_path")
     val image: String? = null
 )
-

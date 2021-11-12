@@ -8,7 +8,6 @@ object AppPreferences {
     private const val INIT_ADULT = "INIT_ADULT"
     private const val INIT_LANG = "INIT_LANG"
     private const val NAME_PREF = "PREFERENCES"
-
     private const val NAME_QUERY = "SEARCH_QUERY"
 
     private lateinit var mPreferences: SharedPreferences

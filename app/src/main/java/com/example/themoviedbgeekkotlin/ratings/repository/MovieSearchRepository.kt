@@ -7,15 +7,14 @@ import com.example.themoviedbgeekkotlin.model.Movie
 
 class MovieSearchRepository(private val apiServiceMovie: MoviesApi) {
 
-
     suspend fun fetchNowPlayingMovies(): List<MovieDto>? {
         val deferredResponse =
-            apiServiceMovie.getMoviesPopular(BuildConfig.THEMOVIEDB_API_KEY, 1,"ru", true)
+                apiServiceMovie.getMoviesPopular(BuildConfig.THEMOVIEDB_API_KEY, 1, "ru", true)
         return deferredResponse.results
     }
 
     suspend fun findMoviesByQuery(queryText: String): List<MovieDto>? {
-        val deferredResponse = apiServiceMovie.findMovies(BuildConfig.THEMOVIEDB_API_KEY, queryText,"ru",true, "RU")
+        val deferredResponse = apiServiceMovie.findMovies(BuildConfig.THEMOVIEDB_API_KEY, queryText, "ru", true, "RU")
         return deferredResponse.results
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/searchBar"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="50dp"
     android:background="@color/text_under_image">
 
     <TextView
@@ -56,14 +56,24 @@
 
     </EditText>
 
+    <ImageView
+        android:id="@+id/iVHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_help"
+        app:layout_constraintLeft_toRightOf="@+id/editTextSearch"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="315dp"
+        tools:layout_editor_absoluteY="0dp" />
+
     <Button
         android:id="@+id/searchButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="20dp"
         android:background="@drawable/ic_search_page"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/editTextSearch"
+        app:layout_constraintLeft_toRightOf="@+id/iVHelp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="323dp"
         tools:layout_editor_absoluteY="2dp" />

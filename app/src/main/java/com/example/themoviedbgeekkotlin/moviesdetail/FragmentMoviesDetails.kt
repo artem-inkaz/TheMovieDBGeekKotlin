@@ -35,7 +35,6 @@ class FragmentMoviesDetails : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: FragmentMoviesDetailsViewModel by viewModels { MoviesDetailViewModelFactory() }
-
     private val viewModelList: FragmentMovieListViewModel by viewModels { MoviesListViewModelFactory() }
 
     private var adapter: ActorAdapter? = null

@@ -12,9 +12,7 @@ object DbContract {
 
     object MovieContract {
         const val TABLE_NAME = "movie"
-
         const val COLUMN_NAME_ID = BaseColumns._ID
-
         const val COLUMN_NAME_MOVIE_GROUP_ID = "group_id"
     }
 

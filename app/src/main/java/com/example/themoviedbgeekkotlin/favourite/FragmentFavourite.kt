@@ -25,7 +25,6 @@ class FragmentFavourite : Fragment() {
 
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
-
     private var recycler: RecyclerView? = null
     private var progressBar: ProgressBar? = null
 

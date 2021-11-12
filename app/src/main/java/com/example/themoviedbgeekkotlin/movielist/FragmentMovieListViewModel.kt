@@ -16,8 +16,8 @@ import com.example.themoviedbgeekkotlin.storage.enteties.MovieEntity
 import kotlinx.coroutines.launch
 
 class FragmentMovieListViewModel(
-    private val apiServiceMovie: MoviesApi,
-    private val repository: MoviesRepository
+        private val apiServiceMovie: MoviesApi,
+        private val repository: MoviesRepository
 ) : ViewModel() {
 
     private val _state = MutableLiveData<AppState>(AppState.Init)
@@ -44,49 +44,53 @@ class FragmentMovieListViewModel(
                 _state.value = AppState.Loading
                 // получаем genres (жанры)
                 val genres = apiServiceMovie.getGenres()
+
                 // получаем фильмы по типам
                 val moviesDtoNowPlaying =
-                    apiServiceMovie.getNowPlaying(BuildConfig.THEMOVIEDB_API_KEY, 2, lang, isAdult)
+                        apiServiceMovie.getNowPlaying(BuildConfig.THEMOVIEDB_API_KEY, 2, lang, isAdult)
+
                 val moviesDtoPoular = apiServiceMovie.getMoviesPopular(
-                    BuildConfig.THEMOVIEDB_API_KEY,
-                    2,
-                    lang,
-                    isAdult
+                        BuildConfig.THEMOVIEDB_API_KEY,
+                        2,
+                        lang,
+                        isAdult
                 )
                 val moviesDtoTopRated =
-                    apiServiceMovie.getTopRated(BuildConfig.THEMOVIEDB_API_KEY, 2, lang, isAdult)
+                        apiServiceMovie.getTopRated(BuildConfig.THEMOVIEDB_API_KEY, 2, lang, isAdult)
+
                 val moviesDtoUpComming =
-                    apiServiceMovie.getUpComming(BuildConfig.THEMOVIEDB_API_KEY, 2, lang, isAdult)
+                        apiServiceMovie.getUpComming(BuildConfig.THEMOVIEDB_API_KEY, 2, lang, isAdult)
+
                 val nameGroup1 = "Now Playing"
                 val nameGroup2 = "Poular"
                 val nameGroup3 = "TopRated"
                 val nameGroup4 = "Up Comming"
 
                 val moviesNowPlaying = convertMovieDtoToDomainV2(
-                    nameGroup1,
-                    moviesDtoNowPlaying.results,
-                    genres.genres
+                        nameGroup1,
+                        moviesDtoNowPlaying.results,
+                        genres.genres
                 )
                 val moviesNowPlayingV2 =
-                    convertToMovieGroup(nameGroup1, moviesNowPlaying as ArrayList<Movie>)
+                        convertToMovieGroup(nameGroup1, moviesNowPlaying as ArrayList<Movie>)
 
                 val moviesPoular =
-                    convertMovieDtoToDomainV2(nameGroup2, moviesDtoPoular.results, genres.genres)
+                        convertMovieDtoToDomainV2(nameGroup2, moviesDtoPoular.results, genres.genres)
                 val moviesPoularV2 =
-                    convertToMovieGroup(nameGroup2, moviesPoular as ArrayList<Movie>)
+                        convertToMovieGroup(nameGroup2, moviesPoular as ArrayList<Movie>)
 
                 val moviesTopRated =
-                    convertMovieDtoToDomainV2(nameGroup3, moviesDtoTopRated.results, genres.genres)
+                        convertMovieDtoToDomainV2(nameGroup3, moviesDtoTopRated.results, genres.genres)
                 val moviesTopRatedV2 =
-                    convertToMovieGroup(nameGroup3, moviesTopRated as ArrayList<Movie>)
+                        convertToMovieGroup(nameGroup3, moviesTopRated as ArrayList<Movie>)
 
                 val moviesUpComming =
-                    convertMovieDtoToDomainV2(nameGroup4, moviesDtoUpComming.results, genres.genres)
+                        convertMovieDtoToDomainV2(nameGroup4, moviesDtoUpComming.results, genres.genres)
                 val moviesUpCommingV2 =
-                    convertToMovieGroup(nameGroup4, moviesUpComming as ArrayList<Movie>)
+                        convertToMovieGroup(nameGroup4, moviesUpComming as ArrayList<Movie>)
 
                 listMovieGroup =
-                    listOf(moviesNowPlayingV2, moviesPoularV2, moviesTopRatedV2, moviesUpCommingV2)
+                        listOf(moviesNowPlayingV2, moviesPoularV2, moviesTopRatedV2, moviesUpCommingV2)
 
                 _mutableLiveDataMovies.value = listMovieGroup
                 _state.value = AppState.Success(listMovieGroup)
@@ -120,19 +124,25 @@ class FragmentMovieListViewModel(
                 // load movies from database
 //                val moviesDB = repository.getAllMoviesEntity()
                 val moviesDB = repository.getAllMovies()
+
                 // if there are any movies - show them and show success state
                 if (moviesDB.isNotEmpty()) {
+
                     _mutableLiveDataMovie.value = moviesDB
                     _state.value = AppState.SuccessMovie(moviesDB)
+
                 } else {
+
                     _state.value = AppState.EmptyDataSet
                 }
 
             } catch (e: java.lang.Exception) {
+
                 _state.value = AppState.EmptyDataSet
+
                 Log.e(
-                    FragmentMovieListViewModel::class.java.simpleName,
-                    "Error grab movies data from DB: ${e.message}"
+                        FragmentMovieListViewModel::class.java.simpleName,
+                        "Error grab movies data from DB: ${e.message}"
                 )
             }
         }
@@ -148,17 +158,23 @@ class FragmentMovieListViewModel(
 
                 // if there are any movies - show them and show success state
                 if (moviesDB.isNotEmpty()) {
+
                     _mutableLiveDataMovieNotes.value = moviesDB
+
                     _state.value = AppState.SuccessMovieNotes(moviesDB)
+
                 } else {
+
                     _state.value = AppState.EmptyDataSet
                 }
 
             } catch (e: java.lang.Exception) {
+
                 _state.value = AppState.EmptyDataSet
+
                 Log.e(
-                    FragmentMovieListViewModel::class.java.simpleName,
-                    "Error grab movies data from DB: ${e.message}"
+                        FragmentMovieListViewModel::class.java.simpleName,
+                        "Error grab movies data from DB: ${e.message}"
                 )
             }
         }
