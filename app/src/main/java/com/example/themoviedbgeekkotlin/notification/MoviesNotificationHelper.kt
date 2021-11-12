@@ -6,11 +6,15 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Build
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.themoviedbgeekkotlin.MainActivity
 import com.example.themoviedbgeekkotlin.R
+import com.example.themoviedbgeekkotlin.TOPIC_ID
+import com.google.firebase.messaging.FirebaseMessaging
 
 //Чтобы создать и показать уведомление пользователю, необходимо выполнить следующие шаги:
 //
@@ -23,6 +27,9 @@ import com.example.themoviedbgeekkotlin.R
 // Начиная с 26 API для уведомлений обязательно определить канал,
 // в противном случае они не будут показаны на новых версиях операционной системы Android.
 object MoviesNotificationHelper {
+
+//    private val TOPIC = "now_playing"
+
     /**
      * Sets up the notification channels for API 26+.
      * Note: This uses package name + channel name to create unique channelId's.
@@ -52,6 +59,38 @@ object MoviesNotificationHelper {
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
+    }
+    // Канал для Push уведомлений
+    fun createNotificationChannelForFCM(context: Context, importance: Int, showBadge: Boolean,
+                                  name: String, description: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = name
+            val channel = NotificationChannel(channelId, name, importance)
+            channel.description = description
+            channel.setShowBadge(showBadge)
+
+            channel.enableLights(true)
+            channel.lightColor = Color.RED
+            channel.enableVibration(true)
+//            channel.description = R.string.now_playing_movie_reminder.toString()
+
+            // Register the channel with the system
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+    // Получение экземпляра FirebaseMessaging
+    fun subscribeTopic(context: Context) {
+        // [START subscribe_topic]
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC_ID)
+            .addOnCompleteListener { task ->
+                var message = R.string.message_subscribed.toString()
+                if (!task.isSuccessful) {
+                    message = R.string.message_subscribe_failed.toString()
+                }
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            }
+        // [END subscribe_topics]
     }
 
     /**
@@ -121,4 +160,43 @@ object MoviesNotificationHelper {
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.notify(1001, notificationBuilder.build())
     }
+
+    fun createMoviesNotificationFCM(
+        context: Context, title: String, message: String,
+        bigText: String, autoCancel: Boolean
+    ) {
+        // 1
+        val channelId = R.string.channel_now_playing
+        // 2
+        val notificationBuilder = NotificationCompat.Builder(context, channelId.toString()).apply {
+            setSmallIcon(R.drawable.ic_movie) // 3
+            setContentTitle(title) // 4
+            setContentText(message) // 5
+            setAutoCancel(autoCancel) // 6
+            setStyle(NotificationCompat.BigTextStyle().bigText(bigText)) // 7
+            priority = NotificationCompat.PRIORITY_DEFAULT // 8
+
+            // Создаём Intent и PendingIntent для открытия главного экрана
+//1.Создаём  Intent для запуска главного экрана, то есть MainActivity.
+//2.Устанавливаем флаги для режима launchMode в котором будет запущено приложение.
+//3.Оборачиваем Intent в PendingIntent, используя метод getActivity() для получения Activity которую необходимо запустить.
+//4.Вызываем метод setContentIntent() для передачи созданного PendingIntent в NotificationCompat.
+// Builder чтобы вызвать его при нажатии на уведомление пользователем.
+            val intent = Intent(context, MainActivity::class.java) //1
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK //2
+            val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0) //9 //3
+            setContentIntent(pendingIntent) //4
+        }
+
+        //Отображение уведомления
+        //Теперь осталось добавить код, который покажет уведомление.
+// Тут мы получаем ссылку на NotificationManagerCompat и
+// вызываем метод notify() для отображения уведомления, где 1001 – это просто некий id,
+// который является обязательным, а notificationBuilder.build() – создаёт в итоге уведомление,
+// которое мы так тщательно конструировали.
+        val notificationManager = NotificationManagerCompat.from(context)
+        notificationManager.notify(1001, notificationBuilder.build())
+    }
+
+
 }

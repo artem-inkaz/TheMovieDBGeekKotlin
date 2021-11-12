@@ -17,14 +17,20 @@ class App : Application() {
         // для БД
         context = applicationContext
 
- //необходимо зарегистрировать канал уведомлений.
-// Для этого создайте класс-наследник от Application и назовите его FitnessApp
+ // Необходимо зарегистрировать канал уведомлений.
         MoviesNotificationHelper.createNotificationChannel(
                 this,
                 NotificationManagerCompat.IMPORTANCE_DEFAULT, false,
                 getString(R.string.app_name), "Канал THEMOVIEDB - приложения."
         )
         //Теперь мы сможем отправить уведомление.
+
+        // Регистрация канала push уведомления
+//        MoviesNotificationHelper.createNotificationChannelForFCM(
+//            this,
+//            NotificationManagerCompat.IMPORTANCE_HIGH, false,
+//            CHANNEL_ID, "Канал THEMOVIEDB - Любимые фильмы всегда под рукой"
+//        )
     }
 
     companion object {
