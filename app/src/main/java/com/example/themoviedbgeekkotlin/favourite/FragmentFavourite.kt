@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviedbgeekkotlin.R
 import com.example.themoviedbgeekkotlin.databinding.FragmentFavouriteBinding
-import com.example.themoviedbgeekkotlin.history.MovieHistoryAdapter
+import com.example.themoviedbgeekkotlin.favourite.history.MovieHistoryAdapter
 import com.example.themoviedbgeekkotlin.interfaces.OnItemViewClickListener
 import com.example.themoviedbgeekkotlin.model.Movie
 import com.example.themoviedbgeekkotlin.movielist.AppState
