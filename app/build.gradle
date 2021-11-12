@@ -9,8 +9,10 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
-
 android {
+//    lintOptions {
+//        abortOnError false
+//    }
     signingConfigs {
         singingconf {
             storeFile file('./../keymovie.jks')
@@ -34,6 +36,7 @@ android {
 
         buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
         buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+
     }
 
     buildFeatures {
@@ -44,18 +47,51 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-           signingConfig signingConfigs.singingconf
+            signingConfig signingConfigs.singingconf
+            // URL  для каждой версии могут быть свои
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+            buildConfigField "String", "TYPE", '"RELEASE"'
+            debuggable true
+
         }
         debug {
-//            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
-//            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
-
-            // If you decide to play with this app more than a few times,
-            // please, create your own api key, so this one does not get banned:
-            // https://www.themoviedb.org/documentation/api
-//            buildConfigField "String", "API_KEY", "\"3847095cad8449ec1b9ca6240fa9102c\""
-//              versionNameSuffix "-debug"
            signingConfig signingConfigs.singingconf
+            // URL  для каждой версии могут быть свои
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+            buildConfigField "String", "TYPE", '"DEBUG"'
+//            versionNameSuffix ".debug"
+
+        }
+
+        demo  {
+            signingConfig signingConfigs.singingconf
+            // demo тоже самое что и debug  т.е. основывается на  debug
+            initWith debug
+            // URL  для каждой версии могут быть свои
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+            buildConfigField "String", "TYPE", '"DEMO"'
+            versionNameSuffix ".demo"
+            multiDexEnabled true
+
+            // Можно поменять packagename предварительно сделав изменения в Firebase т.к. там прописан
+            // общий package name package="com.example.themoviedbgeekkotlin"
+            //applicationIdSuffix ".demo"
+
+        }
+
+        beta  {
+            // demo тоже самое что и debug  т.е. основывается на  debug
+            initWith debug
+            signingConfig signingConfigs.singingconf
+            // URL  для каждой версии могут быть свои
+            buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+            buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w300\""
+            buildConfigField "String", "TYPE", '"BETA"'
+            versionNameSuffix ".beta"
+            multiDexEnabled true
         }
     }
     compileOptions {
@@ -64,6 +100,15 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    flavorDimensions 'version'
+    productFlavors {
+        free {
+            dimension 'version'
+        }
+        paid {
+            dimension 'version'
+        }
     }
 
     buildTypes.each {
@@ -101,7 +146,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    // позволяет указывать в какой сборке будут какие зависимости просто implementation значит доступно везде
+    debugImplementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+//    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0'
     //Coil for Image download
     implementation 'io.coil-kt:coil:1.1.0'
@@ -153,4 +200,9 @@ dependencies {
 //    implementation 'android.arch.work:work-runtime:1.0.1'
 //    implementation 'com.google.firebase:firebase-core:18.0.0'
 //    implementation 'com.google.firebase:firebase-iid:21.1.0'
+
+    // Kotlin
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
+    // Testing Fragments in Isolation
+    debugImplementation("androidx.fragment:fragment-testing:$fragment_version")
 }
