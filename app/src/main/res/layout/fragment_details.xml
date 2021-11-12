@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/imgTitlePoster"
             android:layout_width="match_parent"
-            android:layout_height="298dp"
+            android:layout_height="200dp"
             android:contentDescription="@string/image_of_main_poster"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
@@ -23,8 +23,8 @@
             app:srcCompat="@drawable/img_avengers_background" />
 
         <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
             android:background="@drawable/gradient"
             app:layout_constraintBottom_toBottomOf="@+id/imgTitlePoster"
             app:layout_constraintEnd_toEndOf="@+id/imgTitlePoster"
@@ -159,13 +159,23 @@
             android:layout_marginEnd="@dimen/view_big_gap"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/notesMovie"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvCast"
             tools:itemCount="2"
             tools:listitem="@layout/view_holder_actor" />
 
+        <EditText
+            android:id="@+id/notesMovie"
+            style="@style/TextHeaderStyle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+            tools:text="Заметка" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -32,7 +32,7 @@
         android:id="@+id/favouriteFragment"
         android:name="com.example.themoviedbgeekkotlin.favourite.FragmentFavourite"
         android:label="fragment_favourite"
-        tools:layout="@layout/fragment_favourite_fragment"/>
+        tools:layout="@layout/fragment_favourite"/>
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.example.themoviedbgeekkotlin.moviesdetail.service.DetailsFragment"

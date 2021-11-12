@@ -41,9 +41,6 @@ const val DETAILS_RATINGS_EXTRA = "RATINGS"
 const val DETAILS_RUNTIME_EXTRA = "RUNTIME"
 const val DETAILS_REVIEWS_EXTRA = "REVIEWS"
 
-
-//private const val TEMP_INVALID = -100
-//private const val FEELS_LIKE_INVALID = -100
 private const val PROCESS_ERROR = "Обработка ошибки"
 
 class DetailsFragment : Fragment() {
@@ -73,7 +70,6 @@ class DetailsFragment : Fragment() {
                 DETAILS_URL_MALFORMED_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_RESPONSE_SUCCESS_EXTRA -> renderData(
                     MovieDtoEx(
-//                        FactDTO(
                         intent.getIntExtra(DETAILS_ID_EXTRA, 632357),
                         intent.getStringExtra(DETAILS_TITLE_EXTRA),
                         intent.getStringExtra(DETAILS_STORY_EXTRA),
@@ -83,7 +79,6 @@ class DetailsFragment : Fragment() {
                         intent.getIntExtra(DETAILS_REVIEWS_EXTRA, 0),
 
                         )
-//                    )
                 )
                 else -> TODO(PROCESS_ERROR)
             }
@@ -115,7 +110,6 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        movieBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Movie()
 
         binding.recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -126,9 +120,6 @@ class DetailsFragment : Fragment() {
         binding.toolbar.setOnClickListener {
             APP_ACTIVITY.navController.navigate(R.id.action_detailsFragment_to_movielistFragment)
         }
-
-//        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderDataViewModel(it) })
-//        viewModel.getMovieFromLocalStorage()
     }
 
     private fun getMovie() {
@@ -155,28 +146,6 @@ class DetailsFragment : Fragment() {
             tvStorylineText.text = movieDtoEx.overview
         }
     }
-
-    // Статус загрузки
-//    private fun renderDataViewModel(appState: AppState) {
-//
-//        when (appState) {
-//            is AppState.Success -> {
-//                adapter = ActorAdapter()
-//                        .apply { setActor(appState.movie) }
-//                binding.recyclerView.adapter = adapter
-//                binding.recyclerView.adapter?.notifyDataSetChanged()
-//            }
-//            is AppState.Loading -> {
-//            }
-//            is AppState.Error -> {
-//                Snackbar
-//                        .make(binding.root, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
-//                        .setAction(getString(R.string.reload)) { viewModel.getMovieFromLocalStorage() }
-//                        .show()
-//            }
-//        }
-//    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

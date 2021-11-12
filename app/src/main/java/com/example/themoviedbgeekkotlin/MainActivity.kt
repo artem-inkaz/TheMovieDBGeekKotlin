@@ -56,6 +56,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(mToolbar)
         title = getString(R.string.title)
         initBottomNavigation()
+
+        // как только запустилинаше приложение проинициализируем наши настройки
+        AppPreferences.getPreference(this)
     }
 
     private fun initBottomNavigation() {
@@ -91,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         // получение item id
         when (item.itemId) {
             R.id.action_search -> {
-                //               SimpleMovieWorkerManager.startWork(this)
+                //  SimpleMovieWorkerManager.startWork(this)
 
             }
             R.id.action_update_all -> {

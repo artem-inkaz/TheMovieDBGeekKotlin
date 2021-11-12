@@ -9,9 +9,9 @@ data class Movie(
         val id: Int,
         val title: String,
         val overview: String?,
-        val dateRelease: String,
-        val poster: String,
-        val backdrop: String,
+        val dateRelease: String?,
+        val poster: String?,
+        val backdrop: String?,
         val ratings: Float,
         val adult: Boolean,
         val runtime: Int?,
@@ -19,6 +19,3 @@ data class Movie(
         val genres: List<String>,
         val like: Boolean = false
 ) : Parcelable
-
-//fun getDefaultActor()= Actor("Robert", "Downey Jr.", R.drawable.movie_downey)
-//fun getDefaultGenre() = Genre(0, "Боевик")

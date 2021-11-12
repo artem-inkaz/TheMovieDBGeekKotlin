@@ -28,4 +28,9 @@
     <string name="toolbar_title_search">Поиск</string>
     <string name="type_movie">Now Playing</string>
     <string name="title">The Movie DB</string>
+    <string name="settingsbar">Настройки</string>
+    <string name="adult">Adult</string>
+    <string name="en">en</string>
+    <string name="notes_title">Заметка</string>
+    <string name="notes_edit">Заметка</string>
 </resources>
