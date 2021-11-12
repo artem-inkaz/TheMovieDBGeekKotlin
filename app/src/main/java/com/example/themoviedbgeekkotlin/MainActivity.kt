@@ -77,6 +77,10 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.ratingFragment)
                     true
                 }
+                R.id.action_map -> {
+                    navController.navigate(R.id.mapsMovieFragment)
+                    true
+                }
                 else -> true
             }
         }
@@ -117,7 +121,6 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_search -> {
                 //  SimpleMovieWorkerManager.startWork(this)
-
             }
             R.id.action_update_all -> {
                 //               Toast.makeText(this,"Удалить", Toast.LENGTH_LONG).show()

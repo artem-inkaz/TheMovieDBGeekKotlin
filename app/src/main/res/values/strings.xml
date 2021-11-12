@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">TheMovieDBGeekKotlin</string>
     <string name="age_rating_default">13+</string>
     <string name="back_label">Back</string>
@@ -34,4 +34,24 @@
     <string name="notes_title">Заметка</string>
     <string name="notes_edit">Заметка</string>
     <string name="search">Search</string>
+    <string name="map">Map</string>
+    <string name="location_required_error">Location services must be enabled for geofence</string>
+    <string name="geofences_added">Geofence added</string>
+    <string name="geofences_not_added">Problem in adding geofences.</string>
+    <!-- Error strings -->
+    <string name="geofence_not_available">Geofence service is not available now</string>
+    <string name="geofence_too_many_geofences">Your app has registered too many geofences</string>
+    <string name="geofence_too_many_pending_intents">
+        You have provided too many PendingIntents to the addGeofences() call
+    </string>
+    <string name="unknown_geofence_error">
+        Unknown error: the Geofence service is not available now
+    </string>
+    <string name="geofence_entered">Geofence entered.</string>
+    <string name="channel_name">GeofenceStatus</string>
+
+    <string name="notification_channel_description">Geofence status notification</string>
+    <string name="content_text">You found a movie theater <xliff:g id="geofence_location">%1$s</xliff:g>.</string>
+    <string name="geofences_removed">Geofences removed.</string>
+    <string name="geofences_not_removed">Geofences not removed.</string>
 </resources>
